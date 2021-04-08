@@ -125,47 +125,18 @@ lostruct_run = function(data,
 }
 
 
-test = lostruct_run(data = tped, 
+test = lostruct_rn(data = tped, 
              chr = 1, 
              window_size = 20, 
              k_value = 2)
 
 
-df = tped %>% 
-  dplyr::select(Chromosome, 
-                5:length(tped)) %>% 
-  filter(Chromosome == 1) %>% 
-  dplyr::select(-Chromosome)
 
-
-eigen = eigen_windows(df, 
-                      win = 20, 
-                      k = 2)
-
-windist = pc_dist(eigen, 
-                  npc = 2) %>% 
-  as_tibble()
-
-window_size = 20
-
-window_data = tped %>% 
-  select(1:4) %>% 
-  filter(Chromosome == 1) %>% 
-  mutate(window = ceiling(row_number()/window_size)) %>% 
-  group_by(window) %>% 
-  mutate(mean_window = mean(Physical_dist)) %>% 
-  distinct(mean_window, 
-           .keep_all = T) %>% 
-  filter(window %in% 1:nrow(windist))
-
-combo_data = bind_cols(window_data, 
-          windist)
-
-cmdscale(combo_data[7:length(combo_data)], 
-         eig = TRUE, 
-         k = 2)
 
 ##
+
+# Everything below this does not work fully and is essentially tri --------
+
 # map function variation --------------------------------------------------
 
 ## code to split by chrs and  apply lostruc functions per chr
@@ -272,24 +243,6 @@ lostruct_windist(by_chr, 1) %>%
 
 
 ##
-# SINGLE CHR RUN ----------------------------------------------------------
-
-## SINGLE CHROMOSOME RUN
-# Allele_matrix = tped %>% 
-#   select(5:929)
-# 
-# eigenstuff= eigen_windows(Allele_matrix, 
-#               win = 100, 
-#               k = 2)
-# 
-# windist = pc_dist(eigenstuff, 
-#                   npc = 2)
-# 
-# fit2d = cmdscale(windist, 
-#                  eig = TRUE, 
-#                  k = 2)
-
-
 # plotting -------------------------------------------------------------------
 
 theme_set(theme_bw())
