@@ -115,7 +115,7 @@ lostruct_run = function(data,
   message('Scaling the data using MDS')
   MDS_data = cmdscale(combo_data[7:length(combo_data)], 
            eig = TRUE, 
-           k = 2)
+           k = k_value)
   
   MDS_points = MDS_data$points %>% 
     as_tibble()
