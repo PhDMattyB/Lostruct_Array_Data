@@ -244,16 +244,10 @@ Outlier_hunter = function(data){
 }
 
 outliers = Outlier_hunter(lostruct_data)
-## There is an issue with there being overlap in 
-## the outlier_lab values. But this shouldn't make a huge
-## difference when plotting in ggplot if we specify outlier
-## after non-outliers as it will plot it sequentially
-
 
 ##
 
 # Everything below this does not work fully and is essentially tri --------
-
 # map function variation --------------------------------------------------
 
 ## code to split by chrs and  apply lostruc functions per chr
@@ -360,50 +354,3 @@ lostruct_windist(by_chr, 1) %>%
 
 
 ##
-# plotting -------------------------------------------------------------------
-
-theme_set(theme_bw())
-
-chr1_points = read_tsv('chr1_CharrArray_win20_MSDS_points.tsv')
-## read in the matrix of the distances between windows
-chr1_windist = read.table('chr1_CharrArray_win20_windist.txt') %>% 
-  as_tibble()
-
-full_df = bind_cols(chr1_points, 
-                    chr1_windist) %>% 
-  write_tsv('chr1_CharrArray_win20_fulldf.tsv')
-
-# plot(chr1_points, 
-#      xlab = 'Coordinate 1', 
-#      ylab = 'Coordinate 2', 
-#      col = rainbow(1.2*nrow(chr1_windist)), 
-#      pch = 19)
-
-
-ggplot(data = chr1_points, 
-       aes(x = points1, 
-           y = points2, 
-           col = rainbow(nrow(chr1_points))))+
-  geom_point(size = 3) +
-  labs(x = 'Coordinate 1', 
-       y = 'Coordinate 2', 
-       title = 'MSDS plot for each PCA window Chr 1')+
-  theme(
-    legend.position = 'none', 
-    panel.grid.major = element_blank(), 
-    panel.grid.minor = element_blank(), 
-    axis.title = element_text(size = 14), 
-    axis.text = element_text(size = 12)
-  )
-
-
-# Need to define outliers -------------------------------------------------
-
-chr1_fulldf = read_tsv('chr1_CharrArray_win20_fulldf.tsv')
-
-chr1_mds1_outlier = chr1_fulldf[which(chr1_fulldf$points1 > mean(chr1_fulldf$points1)+ 2*sd(chr1_fulldf$points1) | chr1_fulldf$points1 < mean(chr1_fulldf$points1)+-2*sd(chr1_fulldf$points1)),]
-chr1_mds2_outlier = chr1_fulldf[which(chr1_fulldf$points2 > mean(chr1_fulldf$points2)+ 2*sd(chr1_fulldf$points2) | chr1_fulldf$points2 < mean(chr1_fulldf$points2)+-2*sd(chr1_fulldf$points2)),]
-
-
-
-
