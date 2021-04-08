@@ -174,6 +174,7 @@ MDS_scatter = function(data){
 MDS_scatter(lostruct_data)
 
 Outlier_hunter = function(data){
+  
   MDS1_outliers = data %>% 
     ungroup() %>% 
     mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
@@ -197,82 +198,56 @@ Outlier_hunter = function(data){
   Outliers = bind_rows(MDS1_outliers, 
                        MDS2_outliers)
   
-  
-  MDS1_normy = data %>% 
-    ungroup() %>% 
-    mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+  # 
+  MDS1_normy = data %>%
+    ungroup() %>%
+    mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>%
     filter(abs(MDS_Points1) < MDS_cutoff)
-  
-  label = rep('MDS1 non-outlier', 
-              nrow(MDS1_normy)) %>% 
-    as_tibble() %>% 
+  label = rep('MDS1 non-outlier',
+              nrow(MDS1_normy)) %>%
+    as_tibble() %>%
     rename(outlier_lab = value)
-  
-  MDS1_normy = bind_cols(MDS1_normy, 
+  MDS1_normy = bind_cols(MDS1_normy,
                          label)
-  
-  
-  MDS2_normy = data %>% 
-    ungroup() %>% 
-    mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+  MDS2_normy = data %>%
+    ungroup() %>%
+    mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>%
     filter(abs(MDS_Points2) < MDS_cutoff)
-  
-  label = rep('MDS2 non-outlier', 
-              nrow(MDS2_normy)) %>% 
-    as_tibble() %>% 
+  label = rep('MDS2 non-outlier',
+              nrow(MDS2_normy)) %>%
+    as_tibble() %>%
     rename(outlier_lab = value)
-  
-  MDS1_normy = bind_cols(MDS2_normy, 
+  MDS2_normy = bind_cols(MDS2_normy,
                          label)
-  
-  
-  non_outliers = bind_rows(MDS1_normy, 
-                           MDS2_normy)%>% 
-    arrange(window) %>% 
-    distinct(window, 
+
+  # 
+  non_outliers = bind_rows(MDS1_normy,
+                           MDS2_normy)%>%
+    arrange(window) %>%
+    distinct(window,
              .keep_all = T)
-  
-  outlier_df = bind_rows(non_outliers, 
-                         outliers) %>% 
+  # 
+  outlier_df = bind_rows(non_outliers,
+                         Outliers) %>%
     arrange(window)
+
   
+  # outlier_df %>% 
+  # group_by(window, 
+  #          outlier_lab) %>% 
+  #   filter(!duplicated(outlier_lab == 'MDS1 outlier') | outlier_lab != 'MDS1 outlier') %>%
+  #   filter(!duplicated(outlier_lab == 'MDS2 outlier') | outlier_lab != 'MDS2 outlier') %>% 
+  #   ungroup() %>% 
+  #   distinct(window, 
+  #            .keep_all = T)
   
 }
 
 outliers = Outlier_hunter(lostruct_data)
-
-
-MDS1_normy = lostruct_data %>% 
-  ungroup() %>% 
-  mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
-  filter(abs(MDS_Points1) < MDS_cutoff)
-
-label = rep('MDS1 non-outlier', 
-            nrow(MDS1_normy)) %>% 
-  as_tibble() %>% 
-  rename(outlier_lab = value)
-
-MDS1_normy = bind_cols(MDS1_normy, 
-                       label)
-
-
-MDS2_normy = lostruct_data %>% 
-  ungroup() %>% 
-  mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
-  filter(abs(MDS_Points2) < MDS_cutoff)
-
-label = rep('MDS2 non-outlier', 
-            nrow(MDS2_normy)) %>% 
-  as_tibble() %>% 
-  rename(outlier_lab = value)
-
-MDS1_normy = bind_cols(MDS2_normy, 
-                       label) 
-non_outliers = bind_rows(MDS1_normy, 
-                         MDS2_normy)%>% 
-  arrange(window) %>% 
-  distinct(window, 
-           .keep_all = T)
+## There is an issue with there being overlap in 
+## the outlier_lab values. But this shouldn't make a huge
+## difference when plotting in ggplot if we specify outlier
+## after non-outliers as it will plot it sequentially
 
 
 ##
