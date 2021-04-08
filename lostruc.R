@@ -245,6 +245,45 @@ Outlier_hunter = function(data){
 
 outliers = Outlier_hunter(lostruct_data)
 
+
+Outlier_plots = function(normal_data, 
+                              outlier_data){
+  
+  theme_set(theme_bw())
+  
+  colour_pal = c('#F2055C',
+                 '#1F26A6')
+  
+  plot1 = normal_data %>% 
+    ggplot(aes(x = MDS_Points1, 
+               y = MDS_Points2))+
+    geom_point(size = 3, 
+               col = 'Grey', 
+               fill = 'Grey')+
+    geom_point(data = outlier_data, 
+               aes(x = MDS_Points1, 
+                   y = MDS_Points2, 
+                   col = outlier_lab, 
+                   fill = outlier_lab), 
+               size = 3)+
+    scale_colour_manual(values = colour_pal)+
+    labs(x = 'MDS coordinate 1', 
+         y = 'MDS coordinate 2', 
+         col = 'Outlier label', 
+         fill = 'Outlier label')+
+    theme(
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.title = element_text(size = 14), 
+      axis.text = element_text(size = 12)
+    )
+    
+    return(plot1)
+}
+
+Outlier_plots(normal_data = lostruct_data, 
+              outlier_data = outliers)
+
 ##
 
 # Everything below this does not work fully and is essentially tri --------
