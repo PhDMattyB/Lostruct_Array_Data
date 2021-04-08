@@ -182,33 +182,97 @@ Outlier_hunter = function(data){
     ungroup() %>% 
     mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
     filter(abs(MDS_Points2) > MDS_cutoff)
-  
   label = rep('MDS1 outlier', 
               nrow(MDS1_outliers)) %>% 
     as_tibble()
-  
   MDS1_outliers = bind_cols(MDS1_outliers, 
                             label) %>%
     rename(outlier_lab = value)
-  
   label = rep('MDS2 outlier', 
               nrow(MDS2_outliers)) %>% 
     as_tibble()
-  
   MDS2_outliers = bind_cols(MDS2_outliers, 
                             label)%>% 
     rename(outlier_lab = value)
-  
   Outliers = bind_rows(MDS1_outliers, 
                        MDS2_outliers)
+  
+  
+  MDS1_normy = data %>% 
+    ungroup() %>% 
+    mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+    filter(abs(MDS_Points1) < MDS_cutoff)
+  
+  label = rep('MDS1 non-outlier', 
+              nrow(MDS1_normy)) %>% 
+    as_tibble() %>% 
+    rename(outlier_lab = value)
+  
+  MDS1_normy = bind_cols(MDS1_normy, 
+                         label)
+  
+  
+  MDS2_normy = data %>% 
+    ungroup() %>% 
+    mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+    filter(abs(MDS_Points2) < MDS_cutoff)
+  
+  label = rep('MDS2 non-outlier', 
+              nrow(MDS2_normy)) %>% 
+    as_tibble() %>% 
+    rename(outlier_lab = value)
+  
+  MDS1_normy = bind_cols(MDS2_normy, 
+                         label)
+  
+  
+  non_outliers = bind_rows(MDS1_normy, 
+                           MDS2_normy)%>% 
+    arrange(window) %>% 
+    distinct(window, 
+             .keep_all = T)
+  
+  outlier_df = bind_rows(non_outliers, 
+                         outliers) %>% 
+    arrange(window)
+  
   
 }
 
 outliers = Outlier_hunter(lostruct_data)
 
 
-#If want values close to zero
-chrom_zeros=chrom_results[which(chrom_results$MDS2 > -0.01  & chrom_results$MDS1 > -0.01 & chrom_results$MDS2 < 0.01  & chrom_results$MDS1 < 0.01 ),]
+MDS1_normy = lostruct_data %>% 
+  ungroup() %>% 
+  mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+  filter(abs(MDS_Points1) < MDS_cutoff)
+
+label = rep('MDS1 non-outlier', 
+            nrow(MDS1_normy)) %>% 
+  as_tibble() %>% 
+  rename(outlier_lab = value)
+
+MDS1_normy = bind_cols(MDS1_normy, 
+                       label)
+
+
+MDS2_normy = lostruct_data %>% 
+  ungroup() %>% 
+  mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+  filter(abs(MDS_Points2) < MDS_cutoff)
+
+label = rep('MDS2 non-outlier', 
+            nrow(MDS2_normy)) %>% 
+  as_tibble() %>% 
+  rename(outlier_lab = value)
+
+MDS1_normy = bind_cols(MDS2_normy, 
+                       label) 
+non_outliers = bind_rows(MDS1_normy, 
+                         MDS2_normy)%>% 
+  arrange(window) %>% 
+  distinct(window, 
+           .keep_all = T)
 
 
 ##
