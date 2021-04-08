@@ -173,7 +173,7 @@ MDS_scatter = function(data){
 
 MDS_scatter(lostruct_data)
 
-MDS_outliers = function(data){
+Outlier_hunter = function(data){
   MDS1_outliers = data %>% 
     ungroup() %>% 
     mutate(MDS1_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
