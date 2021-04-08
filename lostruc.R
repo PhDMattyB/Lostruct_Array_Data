@@ -117,11 +117,19 @@ lostruct_run = function(data,
            eig = TRUE, 
            k = 2)
   
+  MDS_points = MDS_data$points %>% 
+    as_tibble()
   
-  output = list(combo_data, 
-                MDS_data)
-  
-  return(output)
+  combo_data = bind_cols(combo_data, 
+                         MDS_points) %>% 
+    rename(MDS_Points1 = V1...39,
+           MDS_Points2 = V2...40,
+           V1 = V1...7,
+           V2 = V2...8)
+  # output = list(combo_data, 
+  #               MDS_data)
+  # 
+  # return(output)
 }
 
 
@@ -129,7 +137,6 @@ lostruct_data = lostruct_run(data = tped,
              chr = 1, 
              window_size = 20, 
              k_value = 2)
-
 
 
 
