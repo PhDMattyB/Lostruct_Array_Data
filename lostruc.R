@@ -144,7 +144,7 @@ lostruct_data = lostruct_run(data = tped,
              window_size = 20, 
              k_value = 2)
 
-MDS_scatter = function(data){
+MDS_survey = function(data){
   theme_set(theme_bw())
   
   MDS_points = data %>% 
@@ -171,7 +171,7 @@ MDS_scatter = function(data){
   
 }
 
-MDS_scatter(lostruct_data)
+MDS_survey(lostruct_data)
 
 Outlier_hunter = function(data){
   
@@ -199,37 +199,37 @@ Outlier_hunter = function(data){
                        MDS2_outliers)
   
   # 
-  MDS1_normy = data %>%
-    ungroup() %>%
-    mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>%
-    filter(abs(MDS_Points1) < MDS_cutoff)
-  label = rep('MDS1 non-outlier',
-              nrow(MDS1_normy)) %>%
-    as_tibble() %>%
-    rename(outlier_lab = value)
-  MDS1_normy = bind_cols(MDS1_normy,
-                         label)
-  MDS2_normy = data %>%
-    ungroup() %>%
-    mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>%
-    filter(abs(MDS_Points2) < MDS_cutoff)
-  label = rep('MDS2 non-outlier',
-              nrow(MDS2_normy)) %>%
-    as_tibble() %>%
-    rename(outlier_lab = value)
-  MDS2_normy = bind_cols(MDS2_normy,
-                         label)
-
+  # MDS1_normy = data %>%
+  #   ungroup() %>%
+  #   mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>%
+  #   filter(abs(MDS_Points1) < MDS_cutoff)
+  # label = rep('MDS1 non-outlier',
+  #             nrow(MDS1_normy)) %>%
+  #   as_tibble() %>%
+  #   rename(outlier_lab = value)
+  # MDS1_normy = bind_cols(MDS1_normy,
+  #                        label)
+  # MDS2_normy = data %>%
+  #   ungroup() %>%
+  #   mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>%
+  #   filter(abs(MDS_Points2) < MDS_cutoff)
+  # label = rep('MDS2 non-outlier',
+  #             nrow(MDS2_normy)) %>%
+  #   as_tibble() %>%
+  #   rename(outlier_lab = value)
+  # MDS2_normy = bind_cols(MDS2_normy,
+  #                        label)
   # 
-  non_outliers = bind_rows(MDS1_normy,
-                           MDS2_normy)%>%
-    arrange(window) %>%
-    distinct(window,
-             .keep_all = T)
-  # 
-  outlier_df = bind_rows(non_outliers,
-                         Outliers) %>%
-    arrange(window)
+  # # 
+  # non_outliers = bind_rows(MDS1_normy,
+  #                          MDS2_normy)%>%
+  #   arrange(window) %>%
+  #   distinct(window,
+  #            .keep_all = T)
+  # # 
+  # outlier_df = bind_rows(non_outliers,
+  #                        Outliers) %>%
+  #   arrange(window)
 
   
   # outlier_df %>% 
