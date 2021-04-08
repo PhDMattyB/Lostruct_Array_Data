@@ -125,7 +125,13 @@ lostruct_run = function(data,
     rename(MDS_Points1 = V1...39,
            MDS_Points2 = V2...40,
            V1 = V1...7,
-           V2 = V2...8)
+           V2 = V2...8) %>% 
+    dplyr::select(-MarkerID, 
+                  -Genetic_dist, 
+                  -Physical_dist, 
+                  Chromosome, 
+                  mean_window, 
+                  window:MDS_Points2)
   # output = list(combo_data, 
   #               MDS_data)
   # 
@@ -138,6 +144,34 @@ lostruct_data = lostruct_run(data = tped,
              window_size = 20, 
              k_value = 2)
 
+MDS_scatter = function(data){
+  theme_set(theme_bw())
+  
+  MDS_points = data %>% 
+    dplyr::select(MDS_Points1, 
+                  MDS_Points2)
+  
+  window_distance = data %>%
+    dplyr::select(contains('V'))
+  
+  MDS_points %>% 
+    ggplot(aes(x = MDS_Points1, 
+           y = MDS_Points2,
+           col = rainbow(nrow(window_distance))))+
+    geom_point(size = 3) +
+    labs(x = 'MDS coordinate 1', 
+         y = 'MDS coordinate 2')+
+    theme(
+      legend.position = 'none', 
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.title = element_text(size = 14), 
+      axis.text = element_text(size = 12)
+    )
+  
+}
+
+MDS_scatter(lostruct_data)
 
 
 ##
