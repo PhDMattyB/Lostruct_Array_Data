@@ -125,7 +125,7 @@ lostruct_run = function(data,
 }
 
 
-test = lostruct_rn(data = tped, 
+lostruct_data = lostruct_run(data = tped, 
              chr = 1, 
              window_size = 20, 
              k_value = 2)
