@@ -113,9 +113,15 @@ lostruct_run = function(data,
                          windist)
   
   message('Scaling the data using MDS')
-  cmdscale(combo_data[7:length(combo_data)], 
+  MDS_data = cmdscale(combo_data[7:length(combo_data)], 
            eig = TRUE, 
            k = 2)
+  
+  
+  output = list(combo_data, 
+                MDS_data)
+  
+  return(output)
 }
 
 
