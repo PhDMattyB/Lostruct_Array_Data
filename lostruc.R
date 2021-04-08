@@ -112,6 +112,10 @@ lostruct_run = function(data,
   combo_data = bind_cols(window_data, 
                          windist)
   
+  message('Scaling the data using MDS')
+  cmdscale(combo_data[7:length(combo_data)], 
+           eig = TRUE, 
+           k = 2)
 }
 
 
@@ -150,6 +154,10 @@ window_data = tped %>%
 
 combo_data = bind_cols(window_data, 
           windist)
+
+cmdscale(combo_data[7:length(combo_data)], 
+         eig = TRUE, 
+         k = 2)
 
 ##
 # map function variation --------------------------------------------------
