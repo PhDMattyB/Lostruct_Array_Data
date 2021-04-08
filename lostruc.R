@@ -173,6 +173,51 @@ MDS_scatter = function(data){
 
 MDS_scatter(lostruct_data)
 
+MDS_outliers = function(data){
+  MDS1_outliers = data %>% 
+    ungroup() %>% 
+    mutate(MDS1_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+    filter(abs(MDS_Points1) > MDS1_cutoff)
+  MDS2_outliers = data %>% 
+    ungroup() %>% 
+    mutate(MDS2_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+    filter(abs(MDS_Points2) > MDS2_cutoff)
+  
+  
+  
+}
+
+MDS1_outliers = lostruct_data %>% 
+  ungroup() %>% 
+  mutate(MDS1_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+  filter(abs(MDS_Points1) > MDS1_cutoff) %>% 
+  select(Chromosome, 
+         window, 
+         mean_window, 
+         MDS_Points1, 
+         MDS1_cutoff)
+
+MDS2_outliers = lostruct_data %>% 
+  ungroup() %>% 
+  mutate(MDS2_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+  filter(abs(MDS_Points2) > MDS2_cutoff) %>% 
+  select(Chromosome, 
+         window, 
+         mean_window, 
+         MDS_Points2, 
+         MDS2_cutoff)
+
+  
+         
+
+
+
+chrom_mds1_outliers=chrom_results[which(chrom_results$MDS1 > mean(chrom_results$MDS1)+2*sd(chrom_results$MDS1) | chrom_results$MDS1 < mean(chrom_results$MDS1)+-2*sd(chrom_results$MDS1)),]
+chrom_mds2_outliers=chrom_results[which(chrom_results$MDS2 > mean(chrom_results$MDS2)+2*sd(chrom_results$MDS2) | chrom_results$MDS2 < mean(chrom_results$MDS2)+-2*sd(chrom_results$MDS2)),]
+
+#If want values close to zero
+chrom_zeros=chrom_results[which(chrom_results$MDS2 > -0.01  & chrom_results$MDS1 > -0.01 & chrom_results$MDS2 < 0.01  & chrom_results$MDS1 < 0.01 ),]
+
 
 ##
 
