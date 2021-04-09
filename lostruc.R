@@ -11,6 +11,7 @@
 library(tidyverse)
 library(janitor)
 library(data.table)
+library(patchwork)
 library(lostruct)
 
 ## set the working directory for this script
@@ -277,14 +278,65 @@ Outlier_plots = function(normal_data,
       axis.title = element_text(size = 14), 
       axis.text = element_text(size = 12)
     )
+  
+  
+  outliers_mds1 = outlier_data %>% 
+    filter(outlier_lab == 'MDS1 outlier')
+  outliers_mds2 = outlier_data %>% 
+    filter(outlier_lab == 'MDS2 outlier')
+  
+  plot2 = normal_data %>% 
+    ggplot(aes(x = mean_window, 
+               y = abs(MDS_Points1)))+
+    geom_point(col = 'Grey', 
+               size = 3)+
+    geom_point(data = outliers_mds1, 
+               aes(x = mean_window, 
+                   y = abs(MDS_Points1)),
+               col = '#F2055C',
+               size = 3)+
+    labs(x = 'Mean window position (bp)', 
+         y = 'MDS score (axis 1)')+
+    theme(
+      legend.position = 'none',
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.title = element_text(size = 14), 
+      axis.text = element_text(size = 12)
+    )
+  
+  
+ plot3 = normal_data %>% 
+    ggplot(aes(x = mean_window, 
+               y = abs(MDS_Points2)))+
+    geom_point(col = 'Grey', 
+               size = 3)+
+    geom_point(data = outliers_mds2, 
+               aes(x = mean_window, 
+                   y = abs(MDS_Points2)),
+               col = '#1F26A6',
+               size = 3)+
+    labs(x = 'Mean window position (bp)', 
+         y = 'MDS score (axis 2)')+
+    theme(
+      legend.position = 'none',
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.title = element_text(size = 14), 
+      axis.text = element_text(size = 12)
+    )
+  
+ combo = plot1/(plot2 + plot3)
     
-    return(plot1)
+    return(combo)
 }
 
 Outlier_plots(normal_data = lostruct_data, 
               outlier_data = outliers)
 
 ##
+
+
 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
