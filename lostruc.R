@@ -273,6 +273,8 @@ Outlier_plots = function(normal_data,
          col = 'Outlier label', 
          fill = 'Outlier label')+
     theme(
+      legend.title = element_text(size = 14), 
+      legend.text = element_text(size = 12),
       panel.grid.major = element_blank(), 
       panel.grid.minor = element_blank(), 
       axis.title = element_text(size = 14), 
