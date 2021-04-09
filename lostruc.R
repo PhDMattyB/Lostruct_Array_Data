@@ -102,7 +102,7 @@ lostruct_run = function(data,
   message('calculating mean window size for the chr')
   window_data = data %>% 
     select(1:4) %>% 
-    filter(Chromosome == 1) %>% 
+    filter(Chromosome == chr) %>% 
     mutate(window = ceiling(row_number()/window_size)) %>% 
     group_by(window) %>% 
     mutate(mean_window = mean(Physical_dist)) %>% 
@@ -338,7 +338,69 @@ Outlier_plots(normal_data = lostruct_data,
 
 ##
 
+## Next up. Need to peforma PCA on those regions to see
+## if they're actually structural variants. Going to need
+## the FULL genomic information for the outlier regions. 
 
+Structure_reveal = function(data,
+                            outlier_data,
+                            chr,
+                            window_size, 
+                            k_value){
+  df = data %>% 
+    dplyr::select(Chromosome, 
+                  5:length(tped)) %>% 
+    filter(Chromosome == chr) %>% 
+    dplyr::select(-Chromosome)
+  eigen = eigen_windows(df, 
+                        win = window_size, 
+                        k = k_value)
+  windist = pc_dist(eigen, 
+                    npc = k_value) %>% 
+    as_tibble()
+  
+  window_data = data %>% 
+    select(1:4) %>% 
+    filter(Chromosome == chr) %>% 
+    mutate(window = ceiling(row_number()/window_size)) %>% 
+    group_by(window) %>% 
+    mutate(mean_window = mean(Physical_dist)) %>% 
+    distinct(mean_window, 
+             .keep_all = T) %>% 
+    filter(window %in% 1:nrow(windist))
+  
+}
+
+
+df = tped %>% 
+  dplyr::select(Chromosome, 
+                5:length(tped)) %>% 
+  filter(Chromosome == 1) %>% 
+  dplyr::select(-Chromosome)
+eigen = eigen_windows(df, 
+                      win = 20, 
+                      k = 2)
+windist = pc_dist(eigen, 
+                  npc = 2) %>% 
+  as_tibble()
+
+tped_data = tped %>% 
+  # select(1:4) %>% 
+  filter(Chromosome == 1) %>% 
+  mutate(window = ceiling(row_number()/20)) %>% 
+  group_by(window) %>% 
+  mutate(mean_window = mean(Physical_dist)) %>% 
+  filter(window %in% outliers$window) %>% 
+  select(Chromosome, 
+         MarkerID,
+         Genetic_dist, 
+         Physical_dist, 
+         window, 
+         mean_window, 
+         contains('_'))
+## NEed to split the tped back into map and ped file formats  
+  
+  
 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
