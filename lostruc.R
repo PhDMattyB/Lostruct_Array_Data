@@ -348,24 +348,6 @@ Structure_reveal = function(data,
                             outlier_window,
                             window_size, 
                             k_value){
-  df = data %>% 
-    dplyr::select(Chromosome, 
-                  5:length(tped)) %>% 
-    filter(Chromosome == chr) %>% 
-    dplyr::select(-Chromosome)
-  eigen = eigen_windows(df, 
-                        win = window_size, 
-                        k = k_value)
-  windist = pc_dist(eigen, 
-                    npc = k_value) %>% 
-    as_tibble()
-  
-  window_data = data %>% 
-    select(1:4) %>% 
-    filter(Chromosome == chr) %>% 
-    mutate(window = ceiling(row_number()/window_size)) %>% 
-    group_by(window) %>% 
-    mutate(mean_window = mean(Physical_dist)) 
   
 }
 
