@@ -364,10 +364,7 @@ Structure_reveal = function(data,
     filter(Chromosome == chr) %>% 
     mutate(window = ceiling(row_number()/window_size)) %>% 
     group_by(window) %>% 
-    mutate(mean_window = mean(Physical_dist)) %>% 
-    distinct(mean_window, 
-             .keep_all = T) %>% 
-    filter(window %in% 1:nrow(windist))
+    mutate(mean_window = mean(Physical_dist)) 
   
 }
 
@@ -397,10 +394,40 @@ tped_data = tped %>%
          Physical_dist, 
          window, 
          mean_window, 
-         contains('_'))
+         contains('_')) 
 ## NEed to split the tped back into map and ped file formats  
-  
-  
+
+## Need to create a data frame for each of the outlier windows
+
+## Splitting by window to get a dataframe for each outlier window
+by_window = split(tped_data, tped_data$window) 
+
+make_map = by_window$'3' %>% 
+  ungroup() %>% 
+  select(Chromosome,
+         MarkerID,
+         Genetic_dist,
+         Physical_dist,
+         window,
+         mean_window)
+
+marker_names = by_window$'3' %>% 
+  ungroup() %>% 
+  select(MarkerID) %>% 
+  t() %>% 
+  as_tibble() %>% 
+  row_to_names(row_number = 1) %>% 
+  names()
+
+make_ped = by_window$'3' %>% 
+  ungroup() %>% 
+  select(contains('_'), 
+         -Genetic_dist, 
+         -Physical_dist, 
+         -mean_window) %>% 
+  t() %>% 
+  as_tibble() %>% 
+  rename_all(funs(c(marker_names)))
 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
