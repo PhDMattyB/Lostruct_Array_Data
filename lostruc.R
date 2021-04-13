@@ -345,6 +345,7 @@ Outlier_plots(normal_data = lostruct_data,
 Structure_reveal = function(data,
                             outlier_data,
                             chr,
+                            outlier_window,
                             window_size, 
                             k_value){
   df = data %>% 
@@ -395,9 +396,6 @@ tped_data = tped %>%
          window, 
          mean_window, 
          contains('_')) 
-## NEed to split the tped back into map and ped file formats  
-
-## Need to create a data frame for each of the outlier windows
 
 ## Splitting by window to get a dataframe for each outlier window
 by_window = split(tped_data, tped_data$window) 
