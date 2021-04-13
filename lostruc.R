@@ -348,9 +348,76 @@ Structure_reveal = function(data,
                             outlier_window,
                             window_size, 
                             k_value){
+  df = data %>% 
+    dplyr::select(Chromosome, 
+                  5:length(tped)) %>% 
+    filter(Chromosome == chr) %>% 
+    dplyr::select(-Chromosome)
+  eigen = eigen_windows(df, 
+                        win = window_size, 
+                        k = k_value)
+  windist = pc_dist(eigen, 
+                    npc = k_value) %>% 
+    as_tibble()
+  
+  tped_data = data %>% 
+    # select(1:4) %>% 
+    filter(Chromosome == chr) %>% 
+    mutate(window = ceiling(row_number()/window_size)) %>% 
+    group_by(window) %>% 
+    mutate(mean_window = mean(Physical_dist)) %>% 
+    filter(window %in% outliers$window) %>% 
+    select(Chromosome, 
+           MarkerID,
+           Genetic_dist, 
+           Physical_dist, 
+           window, 
+           mean_window, 
+           contains('_')) 
+  
+  ## Splitting by window to get a dataframe for each outlier window
+  by_window = split(tped_data, tped_data$window) 
+  
+  make_map = by_window$outlier_window %>% 
+    # ungroup() %>% 
+    select(Chromosome,
+           MarkerID,
+           Genetic_dist,
+           Physical_dist,
+           window,
+           mean_window)
+  
+  marker_names = by_window$outlier_window %>% 
+    # ungroup() %>% 
+    select(MarkerID) %>% 
+    t() %>% 
+    as_tibble() %>% 
+    row_to_names(row_number = 1) %>% 
+    names()
+  
+  make_ped = by_window$outlier_window %>% 
+    # ungroup() %>% 
+    select(contains('_'), 
+           -Genetic_dist, 
+           -Physical_dist, 
+           -mean_window) %>% 
+    t() %>% 
+    as_tibble() %>% 
+    rename_all(funs(c(marker_names)))
+  
+  output = list(make_map, 
+                make_ped)
+  return(output)
+  
   
 }
 
+function_test = Structure_reveal(data = tped, 
+                 outlier_data = outliers, 
+                 chr = 1, 
+                 outlier_window = '3',
+                 window_size = 20, 
+                 k_value = 2)
 
 df = tped %>% 
   dplyr::select(Chromosome, 
@@ -377,7 +444,8 @@ tped_data = tped %>%
          Physical_dist, 
          window, 
          mean_window, 
-         contains('_')) 
+         contains('_')) %>% 
+  paste0()
 
 ## Splitting by window to get a dataframe for each outlier window
 by_window = split(tped_data, tped_data$window) 
