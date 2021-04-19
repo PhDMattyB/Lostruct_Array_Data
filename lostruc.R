@@ -62,7 +62,7 @@ Create_tped = function(ped, map){
            everything())
 }
 
-tped = Create_tped(ped = ped, 
+tped = Create_tped(ped = OG_ped, 
                    map = map) 
 
 # Chr by Chr functions ----------------------------------------------------
@@ -125,8 +125,8 @@ lostruct_run = function(data,
   
   combo_data = bind_cols(combo_data, 
                          MDS_points) %>% 
-    rename(MDS_Points1 = V1...39,
-           MDS_Points2 = V2...40,
+    rename(MDS_Points1 = V1...40,
+           MDS_Points2 = V2...41,
            V1 = V1...7,
            V2 = V2...8) %>% 
     dplyr::select(-MarkerID, 
@@ -143,7 +143,7 @@ lostruct_run = function(data,
 
 
 lostruct_data = lostruct_run(data = tped, 
-             chr = 1, 
+             chr = 2, 
              window_size = 20, 
              k_value = 2)
 
@@ -425,9 +425,11 @@ Outlier_data = function(data,
 
  outlier_full_data
  
- Chr1_win3_map = map_maker(outlier_full_data$'3')
- Chr1_win3_ped = ped_maker(outlier_full_data$'3')
  env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/SampleSites_Coords_1June2020.csv')
+ 
+ Chr1_win17_map = map_maker(outlier_full_data$'17')
+ Chr1_win17_ped = ped_maker(outlier_full_data$'17')
+ 
  
  
  ## Now we need to run a PCA in adegenet!!
@@ -485,12 +487,13 @@ Adegenet_PCA = function(outlier_ped,
    
    return(ped)
  }
-chr1_win3_data = Adegenet_PCA(outlier_ped = Chr1_win3_ped, 
-                    outlier_map = Chr1_win3_map, 
-                    OG_ped = ped,
-                    env = env_data)
 
-theme_set(theme_bw())
+chr1_win17_data = Adegenet_PCA(outlier_ped = Chr1_win17_ped, 
+                              outlier_map = Chr1_win17_map, 
+                              OG_ped = ped,
+                              env = env_data)
+
+# theme_set(theme_bw())
 Pop_that_pca = function(data, 
                         pop_num,
                         chr_num,
@@ -520,7 +523,7 @@ Pop_that_pca = function(data,
     
 }
 
-Pop_that_pca(chr1_win3_data, 
+Pop_that_pca(chr1_win5_data, 
              pop_num = 37,
              chr_num = 1, 
-             win_num = 3)
+             win_num = 17)
