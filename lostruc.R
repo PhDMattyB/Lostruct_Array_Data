@@ -490,7 +490,40 @@ chr1_win3_data = Adegenet_PCA(outlier_ped = Chr1_win3_ped,
                     OG_ped = ped,
                     env = env_data)
 
+theme_set(theme_bw())
+Pop_that_pca = function(data, 
+                        pop_num,
+                        chr_num,
+                        win_num){
+  
+  data %>% 
+    ggplot(aes(x = Axis1, 
+               y = Axis2))+
+    geom_point(aes(col = FamilyID), 
+               size = 2)+
+    labs(x = 'PCA axis 1', 
+         y = 'PCA axis 2', 
+         title = paste0('Chr', 
+                        chr_num,
+                        " ",
+                        'Win',
+                        win_num,
+                        " ",
+                        'PCA plot'))+
+    scale_color_manual(values = magma(n = pop_num))+
+    theme(
+      legend.position = 'none', 
+      panel.grid = element_blank(), 
+      axis.title = element_text(size = 14), 
+      axis.text = element_text(size = 12)
+    )
+    
+}
 
+Pop_that_pca(chr1_win3_data, 
+             pop_num = 37,
+             chr_num = 1, 
+             win_num = 3)
 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
