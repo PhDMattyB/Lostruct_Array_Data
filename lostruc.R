@@ -145,6 +145,8 @@ lostruct_data = lostruct_run(data = tped,
              window_size = 20, 
              k_value = 2)
 
+lostruct_data$window
+
 MDS_survey = function(data){
   theme_set(theme_bw())
   
@@ -342,7 +344,7 @@ Outlier_plots(normal_data = lostruct_data,
 ## if they're actually structural variants. Going to need
 ## the FULL genomic information for the outlier regions. 
 
-Structure_reveal = function(data,
+Outlier_data = function(data,
                             outlier_data,
                             chr,
                             outlier_window,
@@ -367,7 +369,7 @@ Structure_reveal = function(data,
     group_by(window) %>% 
     mutate(mean_window = mean(Physical_dist)) %>% 
     filter(window %in% outliers$window) %>% 
-    select(Chromosome, 
+    dplyr::select(Chromosome, 
            MarkerID,
            Genetic_dist, 
            Physical_dist, 
@@ -377,106 +379,92 @@ Structure_reveal = function(data,
   
   ## Splitting by window to get a dataframe for each outlier window
   by_window = split(tped_data, tped_data$window) 
-  
-  make_map = by_window$outlier_window %>% 
-    # ungroup() %>% 
-    select(Chromosome,
-           MarkerID,
-           Genetic_dist,
-           Physical_dist,
-           window,
-           mean_window)
-  
-  marker_names = by_window$outlier_window %>% 
-    # ungroup() %>% 
-    select(MarkerID) %>% 
-    t() %>% 
-    as_tibble() %>% 
-    row_to_names(row_number = 1) %>% 
-    names()
-  
-  make_ped = by_window$outlier_window %>% 
-    # ungroup() %>% 
-    select(contains('_'), 
-           -Genetic_dist, 
-           -Physical_dist, 
-           -mean_window) %>% 
-    t() %>% 
-    as_tibble() %>% 
-    rename_all(funs(c(marker_names)))
-  
-  output = list(make_map, 
-                make_ped)
-  return(output)
+  # 
+  # make_map = by_window$outlier_window %>% 
+  #   # ungroup() %>% 
+  #   dplyr::select(Chromosome,
+  #          MarkerID,
+  #          Genetic_dist,
+  #          Physical_dist,
+  #          window,
+  #          mean_window)
+  # 
+  # marker_names = by_window$outlier_window %>% 
+  #   # ungroup() %>% 
+  #   dplyr::select(MarkerID) %>% 
+  #   t() %>% 
+  #   as_tibble() %>% 
+  #   row_to_names(row_number = 1) %>% 
+  #   names()
+  # 
+  # make_ped = by_window$outlier_window %>% 
+  #   # ungroup() %>% 
+  #   dplyr::select(contains('_'), 
+  #          -Genetic_dist, 
+  #          -Physical_dist, 
+  #          -mean_window) %>% 
+  #   t() %>% 
+  #   as_tibble() %>% 
+  #   rename_all(funs(c(marker_names)))
+  # 
+  # output = list(make_map, 
+  #               make_ped)
+  # return(output)
   
   
 }
 
-function_test = Structure_reveal(data = tped, 
+ outlier_full_data = Outlier_data(data = tped, 
                  outlier_data = outliers, 
                  chr = 1, 
                  outlier_window = '3',
                  window_size = 20, 
                  k_value = 2)
 
-df = tped %>% 
-  dplyr::select(Chromosome, 
-                5:length(tped)) %>% 
-  filter(Chromosome == 1) %>% 
-  dplyr::select(-Chromosome)
-eigen = eigen_windows(df, 
-                      win = 20, 
-                      k = 2)
-windist = pc_dist(eigen, 
-                  npc = 2) %>% 
-  as_tibble()
+ map_maker = function(data){
+   make_map = data %>% 
+     ungroup() %>% 
+     select(Chromosome,
+            MarkerID,
+            Genetic_dist,
+            Physical_dist,
+            window,
+            mean_window)
+   
+   
+}
 
-tped_data = tped %>% 
-  # select(1:4) %>% 
-  filter(Chromosome == 1) %>% 
-  mutate(window = ceiling(row_number()/20)) %>% 
-  group_by(window) %>% 
-  mutate(mean_window = mean(Physical_dist)) %>% 
-  filter(window %in% outliers$window) %>% 
-  select(Chromosome, 
-         MarkerID,
-         Genetic_dist, 
-         Physical_dist, 
-         window, 
-         mean_window, 
-         contains('_')) %>% 
-  paste0()
+ ped_maker = function(data){
+   marker_names = data %>% 
+     ungroup() %>% 
+     select(MarkerID) %>% 
+     t() %>% 
+     as_tibble() %>% 
+     row_to_names(row_number = 1) %>% 
+     names()
+   
+   make_ped = data %>% 
+     ungroup() %>% 
+     select(contains('_'), 
+            -Genetic_dist, 
+            -Physical_dist, 
+            -mean_window) %>% 
+     t() %>% 
+     as_tibble() %>% 
+     rename_all(funs(c(marker_names)))
+   
+ }
 
-## Splitting by window to get a dataframe for each outlier window
-by_window = split(tped_data, tped_data$window) 
-
-make_map = by_window$'3' %>% 
-  ungroup() %>% 
-  select(Chromosome,
-         MarkerID,
-         Genetic_dist,
-         Physical_dist,
-         window,
-         mean_window)
-
-marker_names = by_window$'3' %>% 
-  ungroup() %>% 
-  select(MarkerID) %>% 
-  t() %>% 
-  as_tibble() %>% 
-  row_to_names(row_number = 1) %>% 
-  names()
-
-make_ped = by_window$'3' %>% 
-  ungroup() %>% 
-  select(contains('_'), 
-         -Genetic_dist, 
-         -Physical_dist, 
-         -mean_window) %>% 
-  t() %>% 
-  as_tibble() %>% 
-  rename_all(funs(c(marker_names)))
-
+ outlier_full_data
+ 
+ Chr1_win3_map = map_maker(outlier_full_data$'3') %>% 
+   dplyr::select(-window, 
+                 -mean_window)
+ Chr1_win3_ped = ped_maker(outlier_full_data$'3')
+ 
+ 
+ 
+ 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
 
