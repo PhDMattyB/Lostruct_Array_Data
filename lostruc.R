@@ -14,6 +14,7 @@ library(data.table)
 library(patchwork)
 library(lostruct)
 library(adegenet)
+library(viridis)
 
 ## set the working directory for this script
 setwd('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/')
@@ -424,10 +425,9 @@ Outlier_data = function(data,
 
  outlier_full_data
  
- Chr1_win3_map = map_maker(outlier_full_data$'3') %>% 
-   dplyr::select(-window, 
-                 -mean_window)
+ Chr1_win3_map = map_maker(outlier_full_data$'3')
  Chr1_win3_ped = ped_maker(outlier_full_data$'3')
+ env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/SampleSites_Coords_1June2020.csv')
  
  
  ## Now we need to run a PCA in adegenet!!
@@ -469,64 +469,28 @@ Adegenet_PCA = function(outlier_ped,
             scale = F,
             nf = 2, 
             scannf = F)
+   
+   pca_data = pca$li %>% 
+     as_tibble()
+   
+   ped = ped %>% 
+     as_tibble() %>% 
+     bind_cols(., 
+               pca_data)
+   
+   ggplot(data = ped, 
+          aes(x = Axis1, 
+              y = Axis2))+
+     geom_point(aes(col = FamilyID))
+   
+   return(ped)
  }
- 
-env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/SampleSites_Coords_1June2020.csv')
-
-ped_data = OG_ped %>% 
-  dplyr::select(FamilyID, 
-                IndividualID)%>% 
-  filter(FamilyID != 'GDL') 
-
-metadata = left_join(ped_data, 
-          env_data, 
-          by = 'FamilyID')
-
-test = Adegenet_PCA(outlier_ped = Chr1_win3_ped, 
+chr1_win3_data = Adegenet_PCA(outlier_ped = Chr1_win3_ped, 
                     outlier_map = Chr1_win3_map, 
                     OG_ped = ped,
                     env = env_data)
 
 
-env_test = env_data %>% 
-  rename(FamilyID = Population)
-
-ped_data = OG_ped %>% 
-  dplyr::select(FamilyID, 
-                IndividualID)%>% 
-  filter(FamilyID != 'GDL') 
-
-metadata = left_join(ped_data, 
-                     env_test, 
-                     by = 'FamilyID')
-
-ped = bind_cols(metadata, 
-                Chr1_win3_ped)
-
-data = as.data.frame(ped)
-
-genind = df2genind(data[,7:length(data)], 
-                   ploidy = 2, 
-                   ind.names = data[,2],
-                   sep = '\t', 
-                   pop = data[,1]
-)
-
-pca_data = tab(genind, 
-               freq=TRUE, 
-               NA.method="mean")
-
-pca = dudi.pca(df=pca_data,
-               center = T, 
-               scale = F,
-               nf = 2, 
-               scannf = F)
-
-s.class(pca$li, 
-        fac=pop(FamilyID),
-        col=funky(37))
-  
-s.label(pca$li)
 
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
