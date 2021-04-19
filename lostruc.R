@@ -121,20 +121,22 @@ lostruct_run = function(data,
            k = k_value)
   
   MDS_points = MDS_data$points %>% 
-    as_tibble()
+    as_tibble() %>% 
+    rename(MDS_Points1 = V1, 
+           MDS_Points2 = V2)
   
   combo_data = bind_cols(combo_data, 
                          MDS_points) %>% 
-    rename(MDS_Points1 = V1...40,
-           MDS_Points2 = V2...41,
-           V1 = V1...7,
-           V2 = V2...8) %>% 
+    # rename(MDS_Points1 = V1...25,
+    #        MDS_Points2 = V2...26,
+    #        V1 = V1...7,
+    #        V2 = V2...8) %>% 
     dplyr::select(-MarkerID, 
                   -Genetic_dist, 
                   -Physical_dist, 
                   Chromosome, 
                   mean_window, 
-                  window:MDS_Points2)
+                  window:length(.))
   # output = list(combo_data, 
   #               MDS_data)
   # 
@@ -143,7 +145,7 @@ lostruct_run = function(data,
 
 
 lostruct_data = lostruct_run(data = tped, 
-             chr = 2, 
+             chr = 3, 
              window_size = 20, 
              k_value = 2)
 
@@ -385,7 +387,7 @@ Outlier_data = function(data,
 
  outlier_full_data = Outlier_data(data = tped, 
                  outlier_data = outliers, 
-                 chr = 1, 
+                 chr = 2, 
                  window_size = 20, 
                  k_value = 2)
 
@@ -430,6 +432,8 @@ Outlier_data = function(data,
  Chr1_win17_map = map_maker(outlier_full_data$'17')
  Chr1_win17_ped = ped_maker(outlier_full_data$'17')
  
+ Chr2_map = map_maker(outlier_full_data$'23')
+ Chr2_ped = ped_maker(outlier_full_data$'23')
  
  
  ## Now we need to run a PCA in adegenet!!
@@ -488,10 +492,16 @@ Adegenet_PCA = function(outlier_ped,
    return(ped)
  }
 
-chr1_win17_data = Adegenet_PCA(outlier_ped = Chr1_win17_ped, 
-                              outlier_map = Chr1_win17_map, 
-                              OG_ped = ped,
-                              env = env_data)
+# chr1_win17_data = Adegenet_PCA(outlier_ped = Chr1_win17_ped, 
+#                               outlier_map = Chr1_win17_map, 
+#                               OG_ped = ped,
+#                               env = env_data)
+
+
+chr2_data = Adegenet_PCA(outlier_ped = Chr2_ped, 
+                               outlier_map = Chr2_map, 
+                               OG_ped = ped,
+                               env = env_data)
 
 # theme_set(theme_bw())
 Pop_that_pca = function(data, 
@@ -523,7 +533,7 @@ Pop_that_pca = function(data,
     
 }
 
-Pop_that_pca(chr1_win5_data, 
+Pop_that_pca(chr2_data, 
              pop_num = 37,
-             chr_num = 1, 
-             win_num = 17)
+             chr_num = 2, 
+             win_num = 23)
