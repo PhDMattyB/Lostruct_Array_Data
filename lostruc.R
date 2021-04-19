@@ -347,7 +347,6 @@ Outlier_plots(normal_data = lostruct_data,
 Outlier_data = function(data,
                             outlier_data,
                             chr,
-                            outlier_window,
                             window_size, 
                             k_value){
   df = data %>% 
@@ -379,45 +378,12 @@ Outlier_data = function(data,
   
   ## Splitting by window to get a dataframe for each outlier window
   by_window = split(tped_data, tped_data$window) 
-  # 
-  # make_map = by_window$outlier_window %>% 
-  #   # ungroup() %>% 
-  #   dplyr::select(Chromosome,
-  #          MarkerID,
-  #          Genetic_dist,
-  #          Physical_dist,
-  #          window,
-  #          mean_window)
-  # 
-  # marker_names = by_window$outlier_window %>% 
-  #   # ungroup() %>% 
-  #   dplyr::select(MarkerID) %>% 
-  #   t() %>% 
-  #   as_tibble() %>% 
-  #   row_to_names(row_number = 1) %>% 
-  #   names()
-  # 
-  # make_ped = by_window$outlier_window %>% 
-  #   # ungroup() %>% 
-  #   dplyr::select(contains('_'), 
-  #          -Genetic_dist, 
-  #          -Physical_dist, 
-  #          -mean_window) %>% 
-  #   t() %>% 
-  #   as_tibble() %>% 
-  #   rename_all(funs(c(marker_names)))
-  # 
-  # output = list(make_map, 
-  #               make_ped)
-  # return(output)
-  
   
 }
 
  outlier_full_data = Outlier_data(data = tped, 
                  outlier_data = outliers, 
                  chr = 1, 
-                 outlier_window = '3',
                  window_size = 20, 
                  k_value = 2)
 
