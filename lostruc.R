@@ -13,6 +13,7 @@ library(janitor)
 library(data.table)
 library(patchwork)
 library(lostruct)
+library(adegenet)
 
 ## set the working directory for this script
 setwd('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/')
@@ -25,7 +26,7 @@ map = read_tsv('Charr_Lab_recode12_25.03.2021.map',
                              'Physical_dist'))
 
 ## load in the ped file for the SNP array data set
-ped = read_table2('Charr_Lab_recode12_25.03.2021.ped', 
+OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped', 
                   col_names = c('FamilyID', 
                                 'IndividualID', 
                                 'PaternalID', 
@@ -429,8 +430,104 @@ Outlier_data = function(data,
  Chr1_win3_ped = ped_maker(outlier_full_data$'3')
  
  
+ ## Now we need to run a PCA in adegenet!!
  
+Adegenet_PCA = function(outlier_ped, 
+                        outlier_map,
+                        OG_ped,
+                        env){
+  
+   env_data = env %>% 
+     rename(FamilyID = Population)
+   
+   ped_data = OG_ped %>% 
+     dplyr::select(FamilyID, 
+                   IndividualID)%>% 
+     filter(FamilyID != 'GDL') 
+   
+   metadata = left_join(ped_data, 
+                        env_data, 
+                        by = 'FamilyID')
+   
+   ped = bind_cols(metadata, 
+                   outlier_ped)
+   
+   data = as.data.frame(ped)
+   
+   genind = df2genind(data[,8:length(data)], 
+                          ploidy = 2, 
+                          ind.names = data[,2],
+                          sep = '\t', 
+                          pop = data[,1]
+                      )
+   pca_data = tab(genind, 
+       freq=TRUE, 
+       NA.method="mean")
+   
+   pca = dudi.pca(df=pca_data,
+            center = T, 
+            scale = F,
+            nf = 2, 
+            scannf = F)
+ }
  
+env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/SampleSites_Coords_1June2020.csv')
+
+ped_data = OG_ped %>% 
+  dplyr::select(FamilyID, 
+                IndividualID)%>% 
+  filter(FamilyID != 'GDL') 
+
+metadata = left_join(ped_data, 
+          env_data, 
+          by = 'FamilyID')
+
+test = Adegenet_PCA(outlier_ped = Chr1_win3_ped, 
+                    outlier_map = Chr1_win3_map, 
+                    OG_ped = ped,
+                    env = env_data)
+
+
+env_test = env_data %>% 
+  rename(FamilyID = Population)
+
+ped_data = OG_ped %>% 
+  dplyr::select(FamilyID, 
+                IndividualID)%>% 
+  filter(FamilyID != 'GDL') 
+
+metadata = left_join(ped_data, 
+                     env_test, 
+                     by = 'FamilyID')
+
+ped = bind_cols(metadata, 
+                Chr1_win3_ped)
+
+data = as.data.frame(ped)
+
+genind = df2genind(data[,7:length(data)], 
+                   ploidy = 2, 
+                   ind.names = data[,2],
+                   sep = '\t', 
+                   pop = data[,1]
+)
+
+pca_data = tab(genind, 
+               freq=TRUE, 
+               NA.method="mean")
+
+pca = dudi.pca(df=pca_data,
+               center = T, 
+               scale = F,
+               nf = 2, 
+               scannf = F)
+
+s.class(pca$li, 
+        fac=pop(FamilyID),
+        col=funky(37))
+  
+s.label(pca$li)
+
 # Everything below this does not work fully and is essentially tri --------
 # map function variation --------------------------------------------------
 
