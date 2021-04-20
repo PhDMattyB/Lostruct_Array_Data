@@ -139,15 +139,19 @@ MDS_survey = function(data){
   
 }
 
-Outlier_hunter = function(data){
+## Function to identify outlier windows along the chromosome
+## Uses a methods from Forrester et al., 2018 where outliers
+## are a specified standard deviation away from the mean
+Outlier_hunter = function(data, 
+                          sd_percentile){
   
   MDS1_outliers = data %>% 
     ungroup() %>% 
-    mutate(MDS_cutoff = mean(MDS_Points1)+(2*sd(MDS_Points1))) %>% 
+    mutate(MDS_cutoff = mean(MDS_Points1)+(sd_percentile*sd(MDS_Points1))) %>% 
     filter(abs(MDS_Points1) > MDS_cutoff)
   MDS2_outliers = data %>% 
     ungroup() %>% 
-    mutate(MDS_cutoff = mean(MDS_Points2)+(2*sd(MDS_Points2))) %>% 
+    mutate(MDS_cutoff = mean(MDS_Points2)+(sd_percentile*sd(MDS_Points2))) %>% 
     filter(abs(MDS_Points2) > MDS_cutoff)
   label = rep('MDS1 outlier', 
               nrow(MDS1_outliers)) %>% 
@@ -209,6 +213,8 @@ Outlier_hunter = function(data){
   
 }
 
+## ggplot object that plots and highlights the outlier windows
+## along a chromosome
 Outlier_plots = function(normal_data, 
                          outlier_data){
   
@@ -295,6 +301,9 @@ Outlier_plots = function(normal_data,
   return(combo)
 }
 
+## list of data frames with the genomic information of
+## all the outlier windows. Where in the genome
+## and which markers they actually are
 Outlier_data = function(data,
                         outlier_data,
                         chr,
