@@ -7,7 +7,7 @@
 ##
 ##################################################################
 
-## Load the data manipulation work horse
+## Load the packages needed to run the functions
 library(tidyverse)
 library(janitor)
 library(data.table)
@@ -16,9 +16,9 @@ library(lostruct)
 library(adegenet)
 library(viridis)
 
-
-
 # Lostruct helper functions -----------------------------------------------
+
+## Merges ped and map files from Plink into the tped format
 Create_tped = function(ped, map){
   ## Obtaining a vector of names for each individual
   message('Creating vector of individual names')
@@ -45,7 +45,10 @@ Create_tped = function(ped, map){
            everything())
 }
 
-
+## Runs the three main functions from lostruct
+## Calculates a pca for each snp window, 
+## calculates the distance between those windows
+## and then scales and centers them using MDS
 lostruct_run = function(data, 
                         chr, 
                         window_size, 
@@ -107,6 +110,8 @@ lostruct_run = function(data,
   # return(output)
 }
 
+## Outputs a ggplot object that shows the distribution of
+## windows along the chromosome
 MDS_survey = function(data){
   theme_set(theme_bw())
   
