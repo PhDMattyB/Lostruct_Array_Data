@@ -558,4 +558,6 @@ chr11_outlier_map = bind_rows(Chr_map_win7,
                               Chr_map_win8, 
                               Chr_map_win14, 
                               Chr_map_win15)
+write_csv(chr11_outlier_map, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_outlier_windows_map.csv')
 
