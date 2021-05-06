@@ -511,8 +511,8 @@ outlier_full_data = Outlier_data(data = tped,
  outlier_full_data
  
  
-Chr_map = map_maker(outlier_full_data$'8')
-Chr_ped = ped_maker(outlier_full_data$'8')
+Chr_map = map_maker(outlier_full_data$'15')
+Chr_ped = ped_maker(outlier_full_data$'15')
  
 
 chr_data = Adegenet_PCA(outlier_ped = Chr_ped, 
@@ -523,8 +523,12 @@ chr_data = Adegenet_PCA(outlier_ped = Chr_ped,
 Pop_that_pca(chr_data, 
              pop_num = 37,
              chr_num = 11, 
-             win_num = 8)
+             win_num = 15)
 
+PCA_outlier_win15 = Pop_that_pca(chr_data, 
+             pop_num = 37,
+             chr_num = 11, 
+             win_num = 15)
 
 # Combine consequtive outlier windows -------------------------------------
 
@@ -551,7 +555,7 @@ chr_data_win8 = chr_data_win8 %>%
 chr_combo_win78 = bind_cols(chr_data_win7, 
           chr_data_win8)
 
-Pop_that_pca(chr_combo_win78, 
+PCA_outlier_wins7and8 = Pop_that_pca(chr_combo_win78, 
              pop_num = 37,
              chr_num = 11, 
              win_num = 78)
