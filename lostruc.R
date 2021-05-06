@@ -484,7 +484,6 @@ OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped',
                                    'Phenotype', 
                                    map$MarkerID))
 
-
 tped = Create_tped(ped = OG_ped, 
                    map = map) 
 
@@ -512,8 +511,8 @@ outlier_full_data = Outlier_data(data = tped,
  outlier_full_data
  
  
-Chr_map = map_maker(outlier_full_data$'14')
-Chr_ped = ped_maker(outlier_full_data$'14')
+Chr_map = map_maker(outlier_full_data$'8')
+Chr_ped = ped_maker(outlier_full_data$'8')
  
 
 chr_data = Adegenet_PCA(outlier_ped = Chr_ped, 
@@ -526,6 +525,62 @@ Pop_that_pca(chr_data,
              chr_num = 11, 
              win_num = 8)
 
+
+# Combine consequtive outlier windows -------------------------------------
+
+## combining windows 7 and 8
+chr_map_win7 = map_maker(outlier_full_data$'7')
+chr_ped_win7 = ped_maker(outlier_full_data$'7')
+chr_data_win7 = Adegenet_PCA(outlier_ped = chr_ped_win7, 
+                        outlier_map = chr_map_win7, 
+                        OG_ped = OG_ped,
+                        env = env_data)
+
+chr_map_win8 = map_maker(outlier_full_data$'8')
+chr_ped_win8 = ped_maker(outlier_full_data$'8')
+chr_data_win8 = Adegenet_PCA(outlier_ped = chr_ped_win8, 
+                             outlier_map = chr_map_win8, 
+                             OG_ped = OG_ped,
+                             env = env_data)
+
+
+
+chr_data_win8 = chr_data_win8 %>% 
+  select(contains('AX-'))
+
+chr_combo_win78 = bind_cols(chr_data_win7, 
+          chr_data_win8)
+
+Pop_that_pca(chr_combo_win78, 
+             pop_num = 37,
+             chr_num = 11, 
+             win_num = 78)
+
+
+## combining chr 11 windows 14 and 15
+chr_map_win14 = map_maker(outlier_full_data$'14')
+chr_ped_win14 = ped_maker(outlier_full_data$'14')
+chr_data_win14 = Adegenet_PCA(outlier_ped = chr_ped_win14, 
+                             outlier_map = chr_map_win14, 
+                             OG_ped = OG_ped,
+                             env = env_data)
+chr_map_win15 = map_maker(outlier_full_data$'15')
+chr_ped_win15 = ped_maker(outlier_full_data$'15')
+chr_data_win15 = Adegenet_PCA(outlier_ped = chr_ped_win15, 
+                             outlier_map = chr_map_win15, 
+                             OG_ped = OG_ped,
+                             env = env_data)
+
+chr_data_win15 = chr_data_win15 %>% 
+  select(contains('AX-'))
+
+chr_combo_win1415 = bind_cols(chr_data_win14, 
+                            chr_data_win15)
+
+Pop_that_pca(chr_combo_win1415, 
+             pop_num = 37,
+             chr_num = 11, 
+             win_num = 1415)
 
 # chr_label = rep('11', 
 #     length(chr_data$IndividualID)) %>% 
