@@ -491,12 +491,13 @@ tped = Create_tped(ped = OG_ped,
 
 lostruct_data = lostruct_run(data = tped, 
              chr = 11, 
-             window_size = 10, 
+             window_size = 20, 
              k_value = 2)
 
 # MDS_survey(lostruct_data)
 
-outliers = Outlier_hunter(lostruct_data)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
 
 # Outlier_plots(normal_data = lostruct_data,
 #               outlier_data = outliers)
@@ -504,15 +505,15 @@ outliers = Outlier_hunter(lostruct_data)
 outlier_full_data = Outlier_data(data = tped, 
                  outlier_data = outliers, 
                  chr = 11, 
-                 window_size = 10, 
+                 window_size = 20, 
                  k_value = 2)
 
  
  outlier_full_data
  
  
- Chr_map = map_maker(outlier_full_data$'37')
- Chr_ped = ped_maker(outlier_full_data$'37')
+ Chr_map = map_maker(outlier_full_data$'15')
+ Chr_ped = ped_maker(outlier_full_data$'15')
  
 
 chr_data = Adegenet_PCA(outlier_ped = Chr_ped, 
@@ -523,4 +524,4 @@ chr_data = Adegenet_PCA(outlier_ped = Chr_ped,
 Pop_that_pca(chr_data, 
              pop_num = 37,
              chr_num = 11, 
-             win_num = 37)
+             win_num = 15)
