@@ -512,8 +512,8 @@ outlier_full_data = Outlier_data(data = tped,
  outlier_full_data
  
  
- Chr_map = map_maker(outlier_full_data$'15')
- Chr_ped = ped_maker(outlier_full_data$'15')
+Chr_map = map_maker(outlier_full_data$'14')
+Chr_ped = ped_maker(outlier_full_data$'14')
  
 
 chr_data = Adegenet_PCA(outlier_ped = Chr_ped, 
@@ -524,4 +524,38 @@ chr_data = Adegenet_PCA(outlier_ped = Chr_ped,
 Pop_that_pca(chr_data, 
              pop_num = 37,
              chr_num = 11, 
-             win_num = 15)
+             win_num = 8)
+
+
+# chr_label = rep('11', 
+#     length(chr_data$IndividualID)) %>% 
+#   as_tibble() %>% 
+#   rename(Chromosome = value)
+# 
+# window_label = rep('14', 
+#                    length(chr_data$IndividualID)) %>% 
+#   as_tibble() %>% 
+#   rename(window = value)
+# 
+# labels = bind_cols(chr_label, 
+#           window_label)
+# 
+# chr11_win14 = bind_cols(labels, 
+#                        chr_data)
+# 
+# chr11_win7
+# chr11_win8
+# chr11_win14
+# chr11_win15
+
+
+Chr_map_win7 = map_maker(outlier_full_data$'7')
+Chr_map_win8 = map_maker(outlier_full_data$'8')
+Chr_map_win14 = map_maker(outlier_full_data$'14')
+Chr_map_win15 = map_maker(outlier_full_data$'15')
+
+chr11_outlier_map = bind_rows(Chr_map_win7, 
+                              Chr_map_win8, 
+                              Chr_map_win14, 
+                              Chr_map_win15)
+
