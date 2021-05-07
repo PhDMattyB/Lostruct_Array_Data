@@ -23,7 +23,7 @@ Create_tped = function(ped, map){
   ## Obtaining a vector of names for each individual
   message('Creating vector of individual names')
   indiv_names = ped %>% 
-    filter(FamilyID != 'GDL') %>%
+    # filter(FamilyID != 'GDL') %>%
     select(IndividualID) %>% 
     t() %>% 
     as_tibble() %>% 
@@ -32,7 +32,7 @@ Create_tped = function(ped, map){
   
   message('Merging ped and map files')
   ped %>% 
-    filter(FamilyID != 'GDL') %>%
+    # filter(FamilyID != 'GDL') %>%
     select(contains('AX-')) %>% 
     t() %>% 
     as_tibble() %>% 
@@ -386,8 +386,9 @@ Adegenet_PCA = function(outlier_ped,
   
   ped_data = OG_ped %>% 
     dplyr::select(FamilyID, 
-                  IndividualID)%>% 
-    filter(FamilyID != 'GDL') 
+                  IndividualID)
+  # %>% 
+    # filter(FamilyID != 'GDL') 
   
   metadata = left_join(ped_data, 
                        env_data, 
@@ -557,34 +558,34 @@ chr_combo_win78 = bind_cols(chr_data_win7,
           chr_data_win8)
 
 PCA_outlier_wins7and8 = Pop_that_pca(chr_combo_win78, 
-             pop_num = 37,
+             pop_num = 38,
              chr_num = 11, 
              win_num = 78)
 
 ## combining chr 11 windows 14 and 15
-chr_map_win14 = map_maker(outlier_full_data$'14')
-chr_ped_win14 = ped_maker(outlier_full_data$'14')
-chr_data_win14 = Adegenet_PCA(outlier_ped = chr_ped_win14, 
-                             outlier_map = chr_map_win14, 
-                             OG_ped = OG_ped,
-                             env = env_data)
-chr_map_win15 = map_maker(outlier_full_data$'15')
-chr_ped_win15 = ped_maker(outlier_full_data$'15')
-chr_data_win15 = Adegenet_PCA(outlier_ped = chr_ped_win15, 
-                             outlier_map = chr_map_win15, 
-                             OG_ped = OG_ped,
-                             env = env_data)
-
-chr_data_win15 = chr_data_win15 %>% 
-  select(contains('AX-'))
-
-chr_combo_win1415 = bind_cols(chr_data_win14, 
-                            chr_data_win15)
-
-Pop_that_pca(chr_combo_win1415, 
-             pop_num = 37,
-             chr_num = 11, 
-             win_num = 1415)
+# chr_map_win14 = map_maker(outlier_full_data$'14')
+# chr_ped_win14 = ped_maker(outlier_full_data$'14')
+# chr_data_win14 = Adegenet_PCA(outlier_ped = chr_ped_win14, 
+#                              outlier_map = chr_map_win14, 
+#                              OG_ped = OG_ped,
+#                              env = env_data)
+# chr_map_win15 = map_maker(outlier_full_data$'15')
+# chr_ped_win15 = ped_maker(outlier_full_data$'15')
+# chr_data_win15 = Adegenet_PCA(outlier_ped = chr_ped_win15, 
+#                              outlier_map = chr_map_win15, 
+#                              OG_ped = OG_ped,
+#                              env = env_data)
+# 
+# chr_data_win15 = chr_data_win15 %>% 
+#   select(contains('AX-'))
+# 
+# chr_combo_win1415 = bind_cols(chr_data_win14, 
+#                             chr_data_win15)
+# 
+# Pop_that_pca(chr_combo_win1415, 
+#              pop_num = 37,
+#              chr_num = 11, 
+#              win_num = 1415)
 
 
 
@@ -599,8 +600,8 @@ chr11_region1_outlier_map = bind_rows(Chr_map_win7,
   select(1:4) %>% 
   rename(`#Chromosome` = Chromosome)
 
-write_csv(chr11_region1_outlier_map, 
-          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows_map.csv')
+write_tsv(chr11_region1_outlier_map, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.map')
 
 ## Making the ped files for continuous regions
 chr_ped_win7 = ped_maker(outlier_full_data$'7')
@@ -608,4 +609,7 @@ chr_ped_win8 = ped_maker(outlier_full_data$'8')
 
 combo_ped = bind_cols(chr_ped_win7, 
                       chr_ped_win8)
-
+OG_ped %>% 
+  select(1:6) %>% 
+  bind_cols(combo_ped) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
