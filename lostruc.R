@@ -609,7 +609,15 @@ chr_ped_win8 = ped_maker(outlier_full_data$'8')
 
 combo_ped = bind_cols(chr_ped_win7, 
                       chr_ped_win8)
-OG_ped %>% 
+combo_ped = OG_ped %>% 
   select(1:6) %>% 
-  bind_cols(combo_ped) %>% 
-  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
+  bind_cols(combo_ped) %>%
+  rename(`#FamilyID` = 1) 
+
+# test = names(combo_ped) %>% 
+#   as_tibble() %>% 
+#   slice(7:46) %>% 
+#   rename(MarkerID = value)
+
+# %>% 
+#   write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
