@@ -561,7 +561,6 @@ PCA_outlier_wins7and8 = Pop_that_pca(chr_combo_win78,
              chr_num = 11, 
              win_num = 78)
 
-
 ## combining chr 11 windows 14 and 15
 chr_map_win14 = map_maker(outlier_full_data$'14')
 chr_ped_win14 = ped_maker(outlier_full_data$'14')
@@ -587,37 +586,26 @@ Pop_that_pca(chr_combo_win1415,
              chr_num = 11, 
              win_num = 1415)
 
-# chr_label = rep('11', 
-#     length(chr_data$IndividualID)) %>% 
-#   as_tibble() %>% 
-#   rename(Chromosome = value)
-# 
-# window_label = rep('14', 
-#                    length(chr_data$IndividualID)) %>% 
-#   as_tibble() %>% 
-#   rename(window = value)
-# 
-# labels = bind_cols(chr_label, 
-#           window_label)
-# 
-# chr11_win14 = bind_cols(labels, 
-#                        chr_data)
-# 
-# chr11_win7
-# chr11_win8
-# chr11_win14
-# chr11_win15
 
 
+# Make combo map and ped files for continuous regions ---------------------
+
+## Making the map files for continouous regions
 Chr_map_win7 = map_maker(outlier_full_data$'7')
 Chr_map_win8 = map_maker(outlier_full_data$'8')
-Chr_map_win14 = map_maker(outlier_full_data$'14')
-Chr_map_win15 = map_maker(outlier_full_data$'15')
 
-chr11_outlier_map = bind_rows(Chr_map_win7, 
-                              Chr_map_win8, 
-                              Chr_map_win14, 
-                              Chr_map_win15)
-write_csv(chr11_outlier_map, 
-          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_outlier_windows_map.csv')
+chr11_region1_outlier_map = bind_rows(Chr_map_win7, 
+                              Chr_map_win8) %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome)
+
+write_csv(chr11_region1_outlier_map, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows_map.csv')
+
+## Making the ped files for continuous regions
+chr_ped_win7 = ped_maker(outlier_full_data$'7')
+chr_ped_win8 = ped_maker(outlier_full_data$'8')
+
+combo_ped = bind_cols(chr_ped_win7, 
+                      chr_ped_win8)
 
