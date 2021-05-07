@@ -441,14 +441,15 @@ Pop_that_pca = function(data,
     geom_point(aes(col = FamilyID), 
                size = 2)+
     labs(x = 'PCA axis 1', 
-         y = 'PCA axis 2', 
-         title = paste0('Chr', 
-                        chr_num,
-                        " ",
-                        'Win',
-                        win_num,
-                        " ",
-                        'PCA plot'))+
+         y = 'PCA axis 2' 
+         # title = paste0('Chr', 
+         #                chr_num,
+         #                " ",
+         #                'Win',
+         #                win_num,
+         #                " ",
+         #                'PCA plot')
+         )+
     scale_color_manual(values = magma(n = pop_num))+
     theme(
       legend.position = 'none', 
