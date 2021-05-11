@@ -532,10 +532,7 @@ PCA_chr1_win7 = Pop_that_pca(Chr1_win7_data,
 ## combine data for continuous regions
 chr1_region1_outlier_map = Chr1_map_win7 %>% 
   select(1:4) %>% 
-  rename(`#Chromosome` = Chromosome, 
-         `Marker ID` = MarkerID, 
-         `Genetic distance` = Genetic_dist, 
-         `Physical distance` = Physical_dist) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
   write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region1_win7_outlier_windows.map')
 head(chr1_region1_outlier_map)
 tail(chr1_region1_outlier_map)
