@@ -598,7 +598,10 @@ Chr_map_win8 = map_maker(outlier_full_data$'8')
 chr11_region1_outlier_map = bind_rows(Chr_map_win7, 
                               Chr_map_win8) %>% 
   select(1:4) %>% 
-  rename(`#Chromosome` = Chromosome)
+  rename(`#Chromosome` = Chromosome, 
+         `Marker ID` = MarkerID, 
+         `Genetic distance` = Genetic_dist, 
+         `Physical distance` = Physical_dist)
 
 write_tsv(chr11_region1_outlier_map, 
           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.map')
@@ -619,6 +622,7 @@ OG_ped %>%
   select(1:6, 
          'AX-181987266':'AX-181928438') %>% 
   rename(`#FamilyID` = 1) %>% 
+  View()
   write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
 # test = names(combo_ped) %>% 
 #   as_tibble() %>% 
