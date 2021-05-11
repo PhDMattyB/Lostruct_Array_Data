@@ -614,6 +614,12 @@ combo_ped = OG_ped %>%
   bind_cols(combo_ped) %>%
   rename(`#FamilyID` = 1) 
 
+
+OG_ped %>% 
+  select(1:6, 
+         'AX-181987266':'AX-181928438') %>% 
+  rename(`#FamilyID` = 1) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
 # test = names(combo_ped) %>% 
 #   as_tibble() %>% 
 #   slice(7:46) %>% 
