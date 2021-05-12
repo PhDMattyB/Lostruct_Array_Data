@@ -33,15 +33,15 @@ env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteDa
 map = read_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_All_Pops_recode12_ChrConvert.map') %>% 
   rename(Chromosome = CHR)
 
-## load in the ped file for the SNP array data set
-# OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped', 
-#                      col_names = c('FamilyID', 
-#                                    'IndividualID', 
-#                                    'PaternalID', 
-#                                    'MaternalID', 
-#                                    'Sex', 
-#                                    'Phenotype', 
-#                                    map$MarkerID))
+# load in the ped file for the SNP array data set
+OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped',
+                     col_names = c('FamilyID',
+                                   'IndividualID',
+                                   'PaternalID',
+                                   'MaternalID',
+                                   'Sex',
+                                   'Phenotype',
+                                   map$MarkerID))
 
 OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_All_Pops_recode12.ped', 
                      col_names = c('#FamilyID', 
@@ -94,12 +94,33 @@ OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData
 
 tped = Create_tped(ped = OG_ped, 
                    map = map) 
-
 # Chr 1 -------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
                              chr = 1, 
                              window_size = 20, 
                              k_value = 2)
+chr = 1
+window_size = 20
+k_value = 2
+df = tped %>% 
+  dplyr::select(Chromosome, 
+                5:length(tped)) %>% 
+  filter(Chromosome == chr) %>% 
+  dplyr::select(-Chromosome) 
+
+is.numeric(df[,1])
+as.numeric(df[,1])
+
+is.numeric(1:length(df))
+as.numeric(1:length(df))
+
+names(df)
+
+test = as.matrix(df)
+
+eigen = eigen_windows(df, 
+                      win = window_size, 
+                      k = k_value)
 
 # MDS_survey(lostruct_data)
 
