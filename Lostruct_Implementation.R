@@ -93,27 +93,16 @@ OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData
   rename(Chromosome = 1)
 
 tped = Create_tped(ped = OG_ped, 
-                   map = map) 
+                   map = map)
 # Chr 1 -------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
                              chr = 1, 
                              window_size = 20, 
                              k_value = 2)
-chr = 1
-window_size = 20
-k_value = 2
-df = tped %>% 
-  dplyr::select(Chromosome, 
-                5:length(tped)) %>% 
-  filter(Chromosome == chr) %>% 
-  dplyr::select(-Chromosome) 
 
-## WHY WONT THIS FUCKING WORK!!!!!!
-## IT worked before!!!
-
-eigen = eigen_windows(df, 
-                      win = window_size, 
-                      k = k_value)
+## Hunting down hidden non-numeric columns
+df %>% select_if(is.numeric)
+df %>% select_if(negate(is.numeric))
 
 # MDS_survey(lostruct_data)
 
