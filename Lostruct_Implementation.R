@@ -24,25 +24,76 @@ setwd('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/')
 env_data = read_csv('~/Charr_Adaptive_Introgression/Charr_Project_1/SampleSiteData/SampleSites_Coords_1June2020.csv')
 
 ## load in the map file for the SNP array data set
-map = read_tsv('Charr_Lab_recode12_25.03.2021.map', 
-               col_names = c('Chromosome', 
-                             'MarkerID', 
-                             'Genetic_dist', 
-                             'Physical_dist'))
+# map = read_tsv('Charr_Lab_recode12_25.03.2021.map', 
+#                col_names = c('Chromosome', 
+#                              'MarkerID', 
+#                              'Genetic_dist', 
+#                              'Physical_dist'))
+
+map = read_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_All_Pops_recode12_ChrConvert.map') %>% 
+  rename(Chromosome = CHR)
 
 ## load in the ped file for the SNP array data set
-OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped', 
-                     col_names = c('FamilyID', 
+# OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped', 
+#                      col_names = c('FamilyID', 
+#                                    'IndividualID', 
+#                                    'PaternalID', 
+#                                    'MaternalID', 
+#                                    'Sex', 
+#                                    'Phenotype', 
+#                                    map$MarkerID))
+
+OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_All_Pops_recode12.ped', 
+                     col_names = c('#FamilyID', 
                                    'IndividualID', 
-                                   'PaternalID', 
+                                   'ParentalID', 
                                    'MaternalID', 
                                    'Sex', 
                                    'Phenotype', 
-                                   map$MarkerID))
+                                   map$MarkerID)) %>% 
+  filter(`#FamilyID` %in% c('ANA', 
+                            'AVA', 
+                            'BLD', 
+                            'BRG', 
+                            'ENG', 
+                            'FRD', 
+                            'FRN', 
+                            'FRS', 
+                            'GDL', 
+                            'IGL', 
+                            'IKA', 
+                            'IKI', 
+                            'IKL', 
+                            'KAM', 
+                            'KAN', 
+                            'KIN', 
+                            'KIY', 
+                            'KOG', 
+                            'KOM', 
+                            'MBB', 
+                            'MCC', 
+                            'NAC', 
+                            'NAK', 
+                            'NOR', 
+                            'PAL', 
+                            'PAN', 
+                            'PBP', 
+                            'PUT', 
+                            'R103', 
+                            'R104', 
+                            'R105', 
+                            'R109', 
+                            'R110', 
+                            'R78', 
+                            'REI', 
+                            'STC', 
+                            'SWA', 
+                            'TOR', 
+                            'UNH')) %>% 
+  rename(Chromosome = 1)
 
 tped = Create_tped(ped = OG_ped, 
                    map = map) 
-
 
 # Chr 1 -------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
@@ -174,7 +225,9 @@ outlier_full_data = Outlier_data(data = tped,
                                  k_value = 2)
 
 
-outlier_full_data
+outlier_full_data$'5' %>% 
+  names() %>% 
+  view()
 
 Chr2_map_win23 = map_maker(outlier_full_data$'23')
 Chr2_ped_win23 = ped_maker(outlier_full_data$'23')
@@ -215,25 +268,27 @@ Chr2_win23_data = Chr2_win23_data %>%
 Chr2_win2223 = bind_cols(Chr2_win22_data, 
                          Chr2_win23_data)
 
+Chr2_win2223 %>% 
+  select(FamilyID) %>% 
+  distinct() %>% 
+  arrange(FamilyID) %>% 
+  View()
+
 Pop_that_pca(Chr2_win2223, 
              pop_num = 38)
 
 write_tsv(Chr2_win2223, 
           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_CHR2_REGION4_win2223_lostruct.txt')
 
-## write map files for the combo region
-
-chr1_region2_outlier_map = bind_rows(chr_map_win16, 
-                                     chr_map_win17) %>% 
+## map file for continuous regions
+Chr2_region4 = bind_rows(Chr2_map_win22, 
+          Chr2_map_win23)%>% 
   select(1:4) %>% 
-  rename(`#Chromosome` = Chromosome, 
-         `Marker ID` = MarkerID, 
-         `Genetic distance` = Genetic_dist, 
-         `Physical distance` = Physical_dist) %>% 
-  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region2_outlier_windows.map')
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR2_REGION4_win2223.map')
 
-head(chr1_region2_outlier_map)
-tail(chr1_region2_outlier_map)
+head(Chr2_region4)
+tail(Chr2_region4)
 
 ## Calculate regions size
 region_size = 32789668-30591434
@@ -260,8 +315,8 @@ lostruct_data = lostruct_run(data = tped,
 outliers = Outlier_hunter(data = lostruct_data,
                           sd_percentile = 2)
 
-Outlier_plots(normal_data = lostruct_data,
-              outlier_data = outliers)
+# Outlier_plots(normal_data = lostruct_data,
+#               outlier_data = outliers)
 
 outlier_full_data = Outlier_data(data = tped, 
                                  outlier_data = outliers, 
