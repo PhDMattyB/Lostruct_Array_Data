@@ -314,7 +314,8 @@ Outlier_data = function(data,
     dplyr::select(Chromosome, 
                   5:length(tped)) %>% 
     filter(Chromosome == chr) %>% 
-    dplyr::select(-Chromosome)
+    dplyr::select(-Chromosome, 
+                  -CHROMOSOME) 
   eigen = eigen_windows(df, 
                         win = window_size, 
                         k = k_value)
