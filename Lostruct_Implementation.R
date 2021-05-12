@@ -108,15 +108,8 @@ df = tped %>%
   filter(Chromosome == chr) %>% 
   dplyr::select(-Chromosome) 
 
-is.numeric(df[,1])
-as.numeric(df[,1])
-
-is.numeric(1:length(df))
-as.numeric(1:length(df))
-
-names(df)
-
-test = as.matrix(df)
+## WHY WONT THIS FUCKING WORK!!!!!!
+## IT worked before!!!
 
 eigen = eigen_windows(df, 
                       win = window_size, 
