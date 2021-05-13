@@ -100,9 +100,12 @@ lostruct_data = lostruct_run(data = tped,
                              window_size = 20, 
                              k_value = 2)
 
+## If you get the error that the data frame isn't numeric
+## use the two select_if arguments to hunt down the 
+## column that isn't numeric
 ## Hunting down hidden non-numeric columns
-df %>% select_if(is.numeric)
-df %>% select_if(negate(is.numeric))
+# df %>% select_if(is.numeric)
+# df %>% select_if(negate(is.numeric))
 
 # MDS_survey(lostruct_data)
 
@@ -121,7 +124,9 @@ outlier_full_data = Outlier_data(data = tped,
 
 outlier_full_data
 
-
+## CHanging the populations that are used in the lostruct
+## analysis DRASTICALLY changes which regions are
+## flagged as outliers and potential structural variants
 ## getting the data for chr1 region 1
 Chr1_map_win7 = map_maker(outlier_full_data$'7')
 Chr1_ped_win7 = ped_maker(outlier_full_data$'7')
