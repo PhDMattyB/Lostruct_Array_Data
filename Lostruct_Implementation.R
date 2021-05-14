@@ -466,9 +466,134 @@ region_size = (24291345-19687700)/1000000
 
 
 # CHR 3 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 3, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 3, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr3_map = map_maker(outlier_full_data$'17')
+Chr3_ped = ped_maker(outlier_full_data$'17')
+
+
+Chr3_data = Adegenet_PCA(outlier_ped = Chr3_ped, 
+                         outlier_map = Chr3_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr3_data, 
+             pop_num = 39,
+             chr_num = 3, 
+             win_num = 00)
 
 
 # CHR3 REGIONS ------------------------------------------------------------
+## COMBINE CONTINUOUS REGIONS 9 & 10
+Chr3_map_win9 = map_maker(outlier_full_data$'9')
+Chr3_ped_win9 = ped_maker(outlier_full_data$'9')
+Chr3_map_win10 = map_maker(outlier_full_data$'10')
+Chr3_ped_win10 = ped_maker(outlier_full_data$'10')
+
+Chr3_data_win9 = Adegenet_PCA(outlier_ped = Chr3_ped_win9, 
+                              outlier_map = CHr3_map_win9, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr3_data_win10 = Adegenet_PCA(outlier_ped = Chr3_ped_win10, 
+                               outlier_map = Chr3_map_win10, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr3_data_win10 = Chr3_data_win10 %>% 
+  select(contains('AX-'))
+
+Chr3_win910 = bind_cols(Chr3_data_win9, 
+                          Chr3_data_win10)
+
+Pop_that_pca(Chr3_win910, 
+             pop_num = 39)
+
+write_tsv(Chr3_win910, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_CHR3_REGION1_win910_14.05.2021.txt')
+
+## map file for continuous regions
+Chr3_region1 = bind_rows(Chr3_map_win9, 
+                         Chr3_map_win10)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR3_REGION1_14.05.2021.map')
+
+head(Chr3_region1)
+tail(Chr3_region1)
+
+## Calculate regions size
+(23582676-21700050)/1000000
+## The region size of the outlier is
+## 1.88 Megabases with 40 SNPs.
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
+
+## COMBINE CONTINUOUS REGIONS 16 & 17
+Chr3_map_win16 = map_maker(outlier_full_data$'16')
+Chr3_ped_win16 = ped_maker(outlier_full_data$'16')
+Chr3_map_win17 = map_maker(outlier_full_data$'17')
+Chr3_ped_win17 = ped_maker(outlier_full_data$'17')
+
+Chr3_data_win16 = Adegenet_PCA(outlier_ped = Chr3_ped_win16, 
+                              outlier_map = CHr3_map_win16, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr3_data_win17 = Adegenet_PCA(outlier_ped = Chr3_ped_win17, 
+                               outlier_map = Chr3_map_win17, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr3_data_win17 = Chr3_data_win17 %>% 
+  select(contains('AX-'))
+
+Chr3_win1617 = bind_cols(Chr3_data_win16, 
+                        Chr3_data_win17)
+
+Pop_that_pca(Chr3_win1617, 
+             pop_num = 39)
+
+write_tsv(Chr3_win1617, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_CHR3_REGION1_win1617_14.05.2021.txt')
+
+## map file for continuous regions
+Chr3_region2 = bind_rows(Chr3_map_win16, 
+                         Chr3_map_win17)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR3_REGION2_14.05.2021.map')
+
+head(Chr3_region2)
+tail(Chr3_region2)
+
+## Calculate regions size
+(33706958-30788823)/1000000
+## The region size of the outlier is
+## 2.92 Megabases with 40 SNPs.
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
+
 
 
 # Chr 11 ------------------------------------------------------------------
