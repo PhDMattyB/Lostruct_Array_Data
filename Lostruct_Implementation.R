@@ -127,9 +127,11 @@ outlier_full_data
 ## analysis DRASTICALLY changes which regions are
 ## flagged as outliers and potential structural variants
 
-## getting the data for chr1 region 1
-Chr1_map_win = map_maker(outlier_full_data$'23')
-Chr1_ped_win = ped_maker(outlier_full_data$'23')
+## Identify which regions might actually show a SV
+## Cycle through each outlier region through the four functions
+## below. 
+Chr1_map_win10 = map_maker(outlier_full_data$'10')
+Chr1_ped_win10 = ped_maker(outlier_full_data$'10')
 
 
 Chr1_win_data = Adegenet_PCA(outlier_ped = Chr1_ped_win, 
@@ -145,22 +147,62 @@ Pop_that_pca(Chr1_win_data,
                              chr_num = 1, 
                              win_num = 11)
 
-## combine data for continuous regions
-chr1_region1_outlier_map = Chr1_map_win7 %>% 
+
+# CHR1 SV REGION HUNTING --------------------------------------------------
+## Combo data for continuous regions
+## CHR1 REGION1 WINDOWS 10 & 11
+chr_map_win10= map_maker(outlier_full_data$'10')
+chr_ped_win10 = ped_maker(outlier_full_data$'10')
+chr_data_win10 = Adegenet_PCA(outlier_ped = chr_ped_win10, 
+                              outlier_map = chr_map_win10, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+chr_map_win11 = map_maker(outlier_full_data$'11')
+chr_ped_win11 = ped_maker(outlier_full_data$'11')
+chr_data_win11 = Adegenet_PCA(outlier_ped = chr_ped_win11, 
+                              outlier_map = chr_map_win11, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+chr_data_win11 = chr_data_win11 %>% 
+  select(contains('AX-'))
+
+chr1_combo_win1011 = bind_cols(chr_data_win10, 
+                               chr_data_win11)
+
+PCA_outlier_wins1011 = Pop_that_pca(chr1_combo_win1011, 
+                                    pop_num = 39,
+                                    chr_num = 1, 
+                                    win_num = 1617)
+
+write_tsv(chr1_combo_win1011, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_chr1_region1.txt')
+## write map files for the combo region
+
+chr1_region1_map = bind_rows(chr_map_win10, 
+                                     chr_map_win11) %>% 
   select(1:4) %>% 
-  rename(`#Chromosome` = Chromosome) %>% 
-  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region1_win7_outlier_windows.map')
-head(chr1_region1_outlier_map)
-tail(chr1_region1_outlier_map)
+  rename(`#Chromosome` = Chromosome, 
+         `Marker ID` = MarkerID, 
+         `Genetic distance` = Genetic_dist, 
+         `Physical distance` = Physical_dist) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region1_outlier_14.05.2021.map')
 
-## region size 
-region_size = 17710378 - 15748822
-region_size/1000000
-## CHR1 REGION 1 is 1.96 Mb
+head(chr1_region1_map)
+tail(chr1_region1_map)
 
-## CHR 1 REGION 2
-## Combining continuous outlier regions
-## combining windows 7 and 8
+## Calculate regions size
+region_size = (23754321-21338526)/1000000
+## CHR1 REGION1 is 2.42 Mb
+
+## CHR 1 REGION 2 WINDOWS 15 & 16
+chr_map_win15 = map_maker(outlier_full_data$'15')
+chr_ped_win15 = ped_maker(outlier_full_data$'15')
+chr_data_win15 = Adegenet_PCA(outlier_ped = chr_ped_win15, 
+                              outlier_map = chr_map_win15, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
 chr_map_win16 = map_maker(outlier_full_data$'16')
 chr_ped_win16 = ped_maker(outlier_full_data$'16')
 chr_data_win16 = Adegenet_PCA(outlier_ped = chr_ped_win16, 
@@ -168,55 +210,101 @@ chr_data_win16 = Adegenet_PCA(outlier_ped = chr_ped_win16,
                               OG_ped = OG_ped,
                               env = env_data)
 
-chr_map_win17 = map_maker(outlier_full_data$'17')
-chr_ped_win17 = ped_maker(outlier_full_data$'17')
-chr_data_win17 = Adegenet_PCA(outlier_ped = chr_ped_win17, 
-                              outlier_map = chr_map_win17, 
-                              OG_ped = OG_ped,
-                              env = env_data)
 
 
-
-chr_data_win17 = chr_data_win17 %>% 
+chr_data_win16 = chr_data_win16 %>% 
   select(contains('AX-'))
 
-chr1_combo_win1617 = bind_cols(chr_data_win16, 
-                               chr_data_win17)
+chr1_combo_win1516 = bind_cols(chr_data_win15, 
+                               chr_data_win16)
 
-PCA_outlier_wins1617 = Pop_that_pca(chr1_combo_win1617, 
-                                    pop_num = 38,
+Pop_that_pca(chr1_combo_win1516, 
+                                    pop_num = 39,
                                     chr_num = 1, 
                                     win_num = 1617)
 
-write_tsv(chr1_combo_win1617, 
+write_tsv(chr1_combo_win1516, 
           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_chr1_region2.txt')
 ## write map files for the combo region
 
-chr1_region2_outlier_map = bind_rows(chr_map_win16, 
-                                     chr_map_win17) %>% 
+chr1_region2_map = bind_rows(chr_map_win15, 
+                                     chr_map_win16) %>% 
   select(1:4) %>% 
   rename(`#Chromosome` = Chromosome, 
          `Marker ID` = MarkerID, 
          `Genetic distance` = Genetic_dist, 
          `Physical distance` = Physical_dist) %>% 
-  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region2_outlier_windows.map')
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region2_windows_14.05.2021.map')
 
-head(chr1_region2_outlier_map)
-tail(chr1_region2_outlier_map)
+tail(chr1_region2_map)
+head(chr1_region2_map)
 
 ## Calculate regions size
-region_size = 32789668-30591434
-region_size/1000000
+chr1_region2_size = (31714898-28470108)/100000
 ## The region size of the outlier is
-## 2.2 Megabases with 40 SNPs. 
-## SNP density is DEFINITELY and issue in identifying 
-## these structural variants. 
+## 32.45Mb with 40 SNPs. 
+
 
 ## To make the combo map ped file
 ## Need to use the data object in the Data_explore script
 ## The data needed for adegenet is recoded as 12 format
 ## needs to be in AA CC GG TT format
 
+
+## CHR 1 REGION 3 WINDOWS 22 & 23
+chr_map_win22 = map_maker(outlier_full_data$'22')
+chr_ped_win22 = ped_maker(outlier_full_data$'22')
+chr_data_win22 = Adegenet_PCA(outlier_ped = chr_ped_win22, 
+                              outlier_map = chr_map_win22, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+chr_map_win23 = map_maker(outlier_full_data$'23')
+chr_ped_win23 = ped_maker(outlier_full_data$'23')
+chr_data_win23 = Adegenet_PCA(outlier_ped = chr_ped_win23, 
+                              outlier_map = chr_map_win23, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+
+
+chr_data_win23 = chr_data_win23 %>% 
+  select(contains('AX-'))
+
+chr1_combo_win2223 = bind_cols(chr_data_win22, 
+                               chr_data_win23)
+
+Pop_that_pca(chr1_combo_win2223, 
+             pop_num = 39,
+             chr_num = 1, 
+             win_num = 1617)
+
+write_tsv(chr1_combo_win2223, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_chr1_region3.txt')
+## write map files for the combo region
+
+chr1_region3_map = bind_rows(chr_map_win22, 
+                             chr_map_win23) %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome, 
+         `Marker ID` = MarkerID, 
+         `Genetic distance` = Genetic_dist, 
+         `Physical distance` = Physical_dist) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr1_region3_windows_14.05.2021.map')
+
+tail(chr1_region3_map)
+head(chr1_region3_map)
+
+## Calculate regions size
+chr1_region3_size = (39740732-38247425)/100000
+## The region size of the outlier is
+## 14.93Mb with 40 SNPs. 
+
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
 
 # CHR 2 -------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
