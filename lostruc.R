@@ -384,17 +384,16 @@ Adegenet_PCA = function(outlier_ped,
                         env){
   
   env_data = env %>% 
-    rename(FamilyID = Population)
+    rename(`#FamilyID` = Population)
   
   ped_data = OG_ped %>% 
-    dplyr::select(FamilyID, 
-                  IndividualID)
+    dplyr::select(1:2)
   # %>% 
     # filter(FamilyID != 'GDL') 
   
   metadata = left_join(ped_data, 
                        env_data, 
-                       by = 'FamilyID')
+                       by = '#FamilyID')
   
   ped = bind_cols(metadata, 
                   outlier_ped)
@@ -441,7 +440,7 @@ Pop_that_pca = function(data,
   data %>% 
     ggplot(aes(x = Axis1, 
                y = Axis2))+
-    geom_point(aes(col = FamilyID), 
+    geom_point(aes(col = `#FamilyID`), 
                size = 2)+
     labs(x = 'PCA axis 1', 
          y = 'PCA axis 2' 

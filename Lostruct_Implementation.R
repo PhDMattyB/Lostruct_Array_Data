@@ -128,8 +128,8 @@ outlier_full_data
 ## flagged as outliers and potential structural variants
 
 ## getting the data for chr1 region 1
-Chr1_map_win = map_maker(outlier_full_data$'10')
-Chr1_ped_win = ped_maker(outlier_full_data$'10')
+Chr1_map_win = map_maker(outlier_full_data$'23')
+Chr1_ped_win = ped_maker(outlier_full_data$'23')
 
 
 Chr1_win_data = Adegenet_PCA(outlier_ped = Chr1_ped_win, 
@@ -137,13 +137,13 @@ Chr1_win_data = Adegenet_PCA(outlier_ped = Chr1_ped_win,
                               OG_ped = OG_ped,
                               env = env_data)
 
-write_tsv(Chr1_win7_data, 
-          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR1_REGION1_lostruct.txt')
+# write_tsv(Chr1_win7_data, 
+#           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR1_REGION1_lostruct.txt')
 
-PCA_chr1_win7 = Pop_that_pca(Chr1_win7_data, 
-                             pop_num = 38,
-                             chr_num = 11, 
-                             win_num = 7)
+Pop_that_pca(Chr1_win_data, 
+                             pop_num = 39,
+                             chr_num = 1, 
+                             win_num = 11)
 
 ## combine data for continuous regions
 chr1_region1_outlier_map = Chr1_map_win7 %>% 
