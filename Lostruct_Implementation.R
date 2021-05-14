@@ -595,6 +595,144 @@ tail(Chr3_region2)
 ## needs to be in AA CC GG TT format
 
 
+# CHR 5 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 5, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 5, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr5_map = map_maker(outlier_full_data$'23')
+Chr5_ped = ped_maker(outlier_full_data$'23')
+
+
+Chr5_data = Adegenet_PCA(outlier_ped = Chr5_ped, 
+                         outlier_map = Chr5_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr5_data, 
+             pop_num = 39,
+             chr_num = 3, 
+             win_num = 00)
+
+
+# CHR 4 REGIONS -----------------------------------------------------------
+## COMBINE CONTINUOUS REGIONS 15, 16, 17, & 18
+Chr5_map_win15 = map_maker(outlier_full_data$'15')
+Chr5_ped_win15 = ped_maker(outlier_full_data$'15')
+Chr5_map_win16 = map_maker(outlier_full_data$'16')
+Chr5_ped_win16 = ped_maker(outlier_full_data$'16')
+Chr5_map_win17 = map_maker(outlier_full_data$'17')
+Chr5_ped_win17 = ped_maker(outlier_full_data$'17')
+Chr5_map_win18 = map_maker(outlier_full_data$'18')
+Chr5_ped_win18 = ped_maker(outlier_full_data$'18')
+
+
+Chr5_data_win15 = Adegenet_PCA(outlier_ped = Chr5_ped_win15, 
+                              outlier_map = Chr5_map_win15, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr5_data_win16 = Adegenet_PCA(outlier_ped = Chr5_ped_win16, 
+                               outlier_map = Chr5_map_win16, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+Chr5_data_win17 = Adegenet_PCA(outlier_ped = Chr5_ped_win17, 
+                               outlier_map = Chr5_map_win17, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+Chr5_data_win18 = Adegenet_PCA(outlier_ped = Chr5_ped_win18, 
+                               outlier_map = Chr5_map_win18, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr5_data_win16 = Chr5_data_win16 %>% 
+  select(contains('AX-'))
+Chr5_data_win17 = Chr5_data_win17 %>% 
+  select(contains('AX-'))
+Chr5_data_win18 = Chr5_data_win18 %>% 
+  select(contains('AX-'))
+
+Chr5_win15161718 = bind_cols(Chr5_data_win15, 
+                        Chr5_data_win16, 
+                        Chr5_data_win17, 
+                        Chr5_data_win18)
+
+Pop_that_pca(Chr5_win15161718, 
+             pop_num = 39)
+
+write_tsv(Chr5_win15161718, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr5_REGION1_win15161718_14.05.2021.txt')
+
+## map file for continuous regions
+Chr5_region1 = bind_rows(Chr5_map_win15, 
+                         Chr5_map_win16, 
+                         Chr5_map_win17, 
+                         Chr5_map_win18)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr5_REGION1_14.05.2021.map')
+
+head(Chr5_region1)
+tail(Chr5_region1)
+
+## Calculate regions size
+(26593414-22808372)/1000000
+## The region size of the outlier is
+## 3.79 Megabases with 40 SNPs.
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
+
+## CHR 5 REGION 2 win 23
+Chr5_map_win23 = map_maker(outlier_full_data$'23')
+Chr5_ped_win23 = ped_maker(outlier_full_data$'23')
+
+
+Chr5_data_win23 = Adegenet_PCA(outlier_ped = Chr5_ped_win23, 
+                               outlier_map = Chr5_map_win23, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Pop_that_pca(Chr5_data_win23, 
+             pop_num = 39)
+
+write_tsv(Chr5_data_win23, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr5_REGION2_win23_14.05.2021.txt')
+
+## map file for continuous regions
+Chr5_region2 = Chr5_map_win23 %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr5_REGION2_14.05.2021.map')
+
+head(Chr5_region2)
+tail(Chr5_region2)
+
+## Calculate regions size
+(32207878-31284810)/1000000
+## The region size of the outlier is
+## 0.92 Megabases with 40 SNPs.
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
+
+
 
 # Chr 11 ------------------------------------------------------------------
 
