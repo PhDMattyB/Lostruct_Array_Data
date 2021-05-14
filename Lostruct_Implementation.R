@@ -34,14 +34,14 @@ map = read_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr
   rename(Chromosome = CHR)
 
 # load in the ped file for the SNP array data set
-OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped',
-                     col_names = c('FamilyID',
-                                   'IndividualID',
-                                   'PaternalID',
-                                   'MaternalID',
-                                   'Sex',
-                                   'Phenotype',
-                                   map$MarkerID))
+# OG_ped = read_table2('Charr_Lab_recode12_25.03.2021.ped',
+#                      col_names = c('FamilyID',
+#                                    'IndividualID',
+#                                    'PaternalID',
+#                                    'MaternalID',
+#                                    'Sex',
+#                                    'Phenotype',
+#                                    map$MarkerID))
 
 OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Charr_All_Pops_recode12.ped', 
                      col_names = c('#FamilyID', 
@@ -89,8 +89,7 @@ OG_ped = read_table2('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData
                             'STC', 
                             'SWA', 
                             'TOR', 
-                            'UNH')) %>% 
-  rename(Chromosome = 1)
+                            'UNH'))
 
 tped = Create_tped(ped = OG_ped, 
                    map = map)
@@ -127,13 +126,14 @@ outlier_full_data
 ## CHanging the populations that are used in the lostruct
 ## analysis DRASTICALLY changes which regions are
 ## flagged as outliers and potential structural variants
+
 ## getting the data for chr1 region 1
-Chr1_map_win7 = map_maker(outlier_full_data$'7')
-Chr1_ped_win7 = ped_maker(outlier_full_data$'7')
+Chr1_map_win = map_maker(outlier_full_data$'10')
+Chr1_ped_win = ped_maker(outlier_full_data$'10')
 
 
-Chr1_win7_data = Adegenet_PCA(outlier_ped = Chr1_ped_win7, 
-                              outlier_map = Chr1_map_win7, 
+Chr1_win_data = Adegenet_PCA(outlier_ped = Chr1_ped_win, 
+                              outlier_map = Chr1_map_win, 
                               OG_ped = OG_ped,
                               env = env_data)
 
