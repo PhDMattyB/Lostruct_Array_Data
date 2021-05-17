@@ -627,7 +627,7 @@ Pop_that_pca(Chr5_data,
              win_num = 00)
 
 
-# CHR 4 REGIONS -----------------------------------------------------------
+# CHR 5 REGIONS -----------------------------------------------------------
 ## COMBINE CONTINUOUS REGIONS 15, 16, 17, & 18
 Chr5_map_win15 = map_maker(outlier_full_data$'15')
 Chr5_ped_win15 = ped_maker(outlier_full_data$'15')
@@ -733,7 +733,310 @@ tail(Chr5_region2)
 ## needs to be in AA CC GG TT format
 
 
+# CHR6 --------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 6, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
 
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 6, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr6_map = map_maker(outlier_full_data$'10')
+Chr6_ped = ped_maker(outlier_full_data$'10')
+
+
+Chr6_data = Adegenet_PCA(outlier_ped = Chr6_ped, 
+                         outlier_map = Chr6_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr6_data, 
+             pop_num = 39,
+             chr_num = 3, 
+             win_num = 00)
+
+
+# CHR6 REGIONS ------------------------------------------------------------
+## COMBINE CONTINUOUS REGIONS 1 & 2
+Chr6_map_win1 = map_maker(outlier_full_data$'1')
+Chr6_ped_win1 = ped_maker(outlier_full_data$'1')
+Chr6_map_win2 = map_maker(outlier_full_data$'2')
+Chr6_ped_win2 = ped_maker(outlier_full_data$'2')
+
+
+Chr6_data_win1 = Adegenet_PCA(outlier_ped = Chr6_ped_win1, 
+                               outlier_map = Chr6_map_win1, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr6_data_win2 = Adegenet_PCA(outlier_ped = Chr6_ped_win2, 
+                               outlier_map = Chr6_map_win2, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr6_data_win2 = Chr6_data_win2 %>% 
+  select(contains('AX-'))
+
+Chr6_win12 = bind_cols(Chr6_data_win1, 
+                             Chr6_data_win2)
+
+Pop_that_pca(Chr6_win12, 
+             pop_num = 39)
+
+write_tsv(Chr6_win12, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr6_REGION1_win12_14.05.2021.txt')
+
+## map file for continuous regions
+Chr6_region1 = bind_rows(Chr6_map_win1, 
+                         Chr6_map_win2)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr6_REGION1_14.05.2021.map')
+
+head(Chr6_region1)
+tail(Chr6_region1)
+
+## REGION 1 SHOWS NO PATTERN OF AN SV
+
+
+## CHR6 REGION2 WIN 9 & 10
+Chr6_map_win9 = map_maker(outlier_full_data$'9')
+Chr6_ped_win9 = ped_maker(outlier_full_data$'9')
+Chr6_map_win10 = map_maker(outlier_full_data$'10')
+Chr6_ped_win10 = ped_maker(outlier_full_data$'10')
+
+
+Chr6_data_win9 = Adegenet_PCA(outlier_ped = Chr6_ped_win9, 
+                              outlier_map = Chr6_map_win9, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr6_data_win10 = Adegenet_PCA(outlier_ped = Chr6_ped_win10, 
+                              outlier_map = Chr6_map_win10, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr6_data_win10 = Chr6_data_win10 %>% 
+  select(contains('AX-'))
+
+Chr6_win910 = bind_cols(Chr6_data_win9, 
+                       Chr6_data_win10)
+
+Pop_that_pca(Chr6_win910, 
+             pop_num = 39)
+
+write_tsv(Chr6_win910, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr6_REGION2_win910_14.05.2021.txt')
+
+## map file for continuous regions
+Chr6_region2 = bind_rows(Chr6_map_win9, 
+                         Chr6_map_win10)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr6_REGION2_14.05.2021.map')
+
+head(Chr6_region2)
+tail(Chr6_region2)
+
+(16112100-13579128)/1000000
+## The region size of the outlier is
+## 2.53 Megabases with 40 SNPs.
+
+## To make the combo map ped file
+## Need to use the data object in the Data_explore script
+## The data needed for adegenet is recoded as 12 format
+## needs to be in AA CC GG TT format
+
+
+# CHR 7 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 7, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 7, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr7_map = map_maker(outlier_full_data$'5')
+Chr7_ped = ped_maker(outlier_full_data$'5')
+
+
+Chr7_data = Adegenet_PCA(outlier_ped = Chr7_ped, 
+                         outlier_map = Chr7_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr7_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+# CHR 7 regions -----------------------------------------------------------
+Chr7_map_win4 = map_maker(outlier_full_data$'4')
+Chr7_ped_win4 = ped_maker(outlier_full_data$'4')
+Chr7_map_win5 = map_maker(outlier_full_data$'5')
+Chr7_ped_win5 = ped_maker(outlier_full_data$'5')
+
+
+Chr7_data_win4 = Adegenet_PCA(outlier_ped = Chr7_ped_win4, 
+                              outlier_map = Chr7_map_win4, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr7_data_win5 = Adegenet_PCA(outlier_ped = Chr7_ped_win5, 
+                              outlier_map = Chr7_map_win5, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr7_data_win5 = Chr7_data_win5 %>% 
+  select(contains('AX-'))
+
+Chr7_win45 = bind_cols(Chr7_data_win4, 
+                       Chr7_data_win5)
+
+Pop_that_pca(Chr7_win45, 
+             pop_num = 39)
+
+write_tsv(Chr7_win45, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr7_REGION1_win42_14.05.2021.txt')
+
+## map file for continuous regions
+Chr7_region1 = bind_rows(Chr7_map_win4, 
+                         Chr7_map_win5)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr7_REGION1_14.05.2021.map')
+
+head(Chr7_region1)
+tail(Chr7_region1)
+
+## region size
+(9888946-5783985)/1000000
+
+
+# CHR 8 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 8, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 8, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr8_map = map_maker(outlier_full_data$'6')
+Chr8_ped = ped_maker(outlier_full_data$'6')
+
+
+Chr8_data = Adegenet_PCA(outlier_ped = Chr8_ped, 
+                         outlier_map = Chr8_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr8_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr8_outlier_window6.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm')
+
+
+# CHR 9 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 9, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 9, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr9_map = map_maker(outlier_full_data$'4')
+Chr9_ped = ped_maker(outlier_full_data$'4')
+
+
+Chr9_data = Adegenet_PCA(outlier_ped = Chr9_ped, 
+                         outlier_map = Chr9_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr9_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr9_outlier_window12.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm')
+
+
+# CHR 9 REGION ------------------------------------------------------------
+Chr9_map_win4 = map_maker(outlier_full_data$'4')
+Chr9_ped_win4 = ped_maker(outlier_full_data$'4')
+
+
+Chr9_data_win4 = Adegenet_PCA(outlier_ped = Chr9_ped_win4, 
+                              outlier_map = Chr9_map_win4, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Pop_that_pca(Chr9_data_win4, 
+             pop_num = 39)
+
+write_tsv(Chr9_data_win4, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr9_REGION1_win4_14.05.2021.txt')
+
+## map file for continuous regions
+Chr9_region1 = Chr9_map_win4%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr9_REGION1_14.05.2021.map')
+
+head(Chr9_region1)
+tail(Chr9_region1)
+
+## region size
+(3499661-2633420)/1000000
+
+##
 # Chr 11 ------------------------------------------------------------------
 
 lostruct_data = lostruct_run(data = tped, 
