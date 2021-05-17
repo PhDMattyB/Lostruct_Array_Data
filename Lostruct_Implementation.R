@@ -1225,115 +1225,56 @@ tail(Chr11_region2)
 ## combing all three regions. THey overlap based on the 
 ## pcadmix results
 
-## old chr 11 code
-# Chr 11 ------------------------------------------------------------------
 
-lostruct_data = lostruct_run(data = tped, 
-                             chr = 11, 
-                             window_size = 20, 
-                             k_value = 2)
-
-# MDS_survey(lostruct_data)
-
-outliers = Outlier_hunter(data = lostruct_data,
-                          sd_percentile = 2)
-
-# Outlier_plots(normal_data = lostruct_data,
-#               outlier_data = outliers)
-
-outlier_full_data = Outlier_data(data = tped, 
-                                 outlier_data = outliers, 
-                                 chr = 11, 
-                                 window_size = 20, 
-                                 k_value = 2)
+Chr11_map_win2 = map_maker(outlier_full_data$'2')
+Chr11_ped_win2 = ped_maker(outlier_full_data$'2')
+Chr11_map_win3 = map_maker(outlier_full_data$'3')
+Chr11_ped_win3 = ped_maker(outlier_full_data$'3')
+Chr11_map_win5 = map_maker(outlier_full_data$'5')
+Chr11_ped_win5 = ped_maker(outlier_full_data$'5')
 
 
-outlier_full_data
+Chr11_data_win2 = Adegenet_PCA(outlier_ped = Chr11_ped_win2, 
+                               outlier_map = Chr11_map_win2, 
+                               OG_ped = OG_ped,
+                               env = env_data)
 
+Chr11_data_win3 = Adegenet_PCA(outlier_ped = Chr11_ped_win3, 
+                               outlier_map = Chr11_map_win3, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+Chr11_data_win5 = Adegenet_PCA(outlier_ped = Chr11_ped_win5, 
+                               outlier_map = Chr11_map_win5, 
+                               OG_ped = OG_ped,
+                               env = env_data)
 
-# chr 11 Combine consequtive outlier windows -------------------------------------
-
-## combining windows 7 and 8
-chr_map_win7 = map_maker(outlier_full_data$'7')
-chr_ped_win7 = ped_maker(outlier_full_data$'7')
-chr_data_win7 = Adegenet_PCA(outlier_ped = chr_ped_win7, 
-                             outlier_map = chr_map_win7, 
-                             OG_ped = OG_ped,
-                             env = env_data)
-
-chr_map_win8 = map_maker(outlier_full_data$'8')
-chr_ped_win8 = ped_maker(outlier_full_data$'8')
-chr_data_win8 = Adegenet_PCA(outlier_ped = chr_ped_win8, 
-                             outlier_map = chr_map_win8, 
-                             OG_ped = OG_ped,
-                             env = env_data)
-
-
-
-chr_data_win8 = chr_data_win8 %>% 
+Chr11_data_win3 = Chr11_data_win3 %>% 
+  select(contains('AX-'))
+Chr11_data_win5 = Chr11_data_win5 %>% 
   select(contains('AX-'))
 
-chr_combo_win78 = bind_cols(chr_data_win7, 
-                            chr_data_win8)
+Chr11_win235 = bind_cols(Chr11_data_win2, 
+                        Chr11_data_win3, 
+                        Chr11_data_win5)
 
-PCA_outlier_wins7and8 = Pop_that_pca(chr_combo_win78, 
-                                     pop_num = 38,
-                                     chr_num = 11, 
-                                     win_num = 78)
+Pop_that_pca(Chr11_win235, 
+             pop_num = 39)
 
-## IMPORTANT NOTE
-## When GDL in not inluded window 15 comes up as an outlier
-## when GDL is included in the analysis GDL doesn't come up
-## as an outlier
+write_tsv(Chr11_win235, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr11_REGION3_win235_14.05.2021.txt')
 
-
-# Make combo map and ped files for continuous regions ---------------------
-
-## Making the map files for continouous regions
-Chr_map_win7 = map_maker(outlier_full_data$'7')
-Chr_map_win8 = map_maker(outlier_full_data$'8')
-
-chr11_region1_outlier_map = bind_rows(Chr_map_win7, 
-                                      Chr_map_win8) %>% 
+## map file for continuous regions
+Chr11_region3 = bind_rows(Chr11_map_win2, 
+                          Chr11_map_win3, 
+                          Chr11_map_win5)%>% 
   select(1:4) %>% 
-  rename(`#Chromosome` = Chromosome, 
-         `Marker ID` = MarkerID, 
-         `Genetic distance` = Genetic_dist, 
-         `Physical distance` = Physical_dist)
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_REGION3_14.05.2021.map')
 
-write_tsv(chr11_region1_outlier_map, 
-          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.map')
+head(Chr11_region3)
+tail(Chr11_region3)
 
-## Calculate regions size
-region_size = 14801093-11095966
-region_size/1000000
-## The region size of the outlier is
-## 3.7 Megabases with 40 SNPs. 
-## SNP density is DEFINITELY and issue in identifying 
-## these structural variants. 
+## region size
+(10393035-2611798)/1000000
+## 7.78 Mb
 
-## Making the ped files for continuous regions
-chr_ped_win7 = ped_maker(outlier_full_data$'7')
-chr_ped_win8 = ped_maker(outlier_full_data$'8')
-
-combo_ped = bind_cols(chr_ped_win7, 
-                      chr_ped_win8)
-combo_ped = OG_ped %>% 
-  select(1:6) %>% 
-  bind_cols(combo_ped) %>%
-  rename(`#FamilyID` = 1) 
-
-
-OG_ped %>% 
-  select(1:6, 
-         'AX-181987266':'AX-181928438') %>% 
-  rename(`#FamilyID` = 1) %>% 
-  View()
-write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
-# test = names(combo_ped) %>% 
-#   as_tibble() %>% 
-#   slice(7:46) %>% 
-#   rename(MarkerID = value)
-
-# %>% 
-#   write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_region1_outlier_windows.ped')
