@@ -1036,7 +1036,196 @@ tail(Chr9_region1)
 ## region size
 (3499661-2633420)/1000000
 
-##
+
+# Chr 10 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 10, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 10, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+
+Chr10_map = map_maker(outlier_full_data$'5')
+Chr10_ped = ped_maker(outlier_full_data$'5')
+
+
+Chr10_data = Adegenet_PCA(outlier_ped = Chr10_ped, 
+                         outlier_map = Chr10_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr10_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+# ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr10_outlier_window12.tiff', 
+#        plot = last_plot(), 
+#        dpi = 'retina', 
+#        units = 'cm')
+
+
+# Chr 10 REGION -----------------------------------------------------------
+
+Chr10_map_win4 = map_maker(outlier_full_data$'4')
+Chr10_ped_win4 = ped_maker(outlier_full_data$'4')
+Chr10_map_win5 = map_maker(outlier_full_data$'5')
+Chr10_ped_win5 = ped_maker(outlier_full_data$'5')
+
+
+Chr10_data_win4 = Adegenet_PCA(outlier_ped = Chr10_ped_win4, 
+                              outlier_map = Chr10_map_win4, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr10_data_win5 = Adegenet_PCA(outlier_ped = Chr10_ped_win5, 
+                              outlier_map = Chr10_map_win5, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Chr10_data_win5 = Chr10_data_win5 %>% 
+  select(contains('AX-'))
+
+Chr10_win45 = bind_cols(Chr10_data_win4, 
+                       Chr10_data_win5)
+
+Pop_that_pca(Chr10_win45, 
+             pop_num = 39)
+
+write_tsv(Chr10_win45, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr10_REGION1_win45_14.05.2021.txt')
+
+## map file for continuous regions
+Chr10_region1 = bind_rows(Chr10_map_win4, 
+                         Chr10_map_win5)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR10_REGION1_14.05.2021.map')
+
+head(Chr10_region1)
+tail(Chr10_region1)
+
+## region size
+(7773641-4844048)/1000000
+
+
+# CHR 11 ------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 11, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 11, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr11_map = map_maker(outlier_full_data$'5')
+Chr11_ped = ped_maker(outlier_full_data$'5')
+
+
+Chr11_data = Adegenet_PCA(outlier_ped = Chr11_ped, 
+                          outlier_map = Chr11_map, 
+                          OG_ped = OG_ped,
+                          env = env_data)
+
+Pop_that_pca(Chr11_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+# CHR 11 REGIONS ----------------------------------------------------------
+## CHR11 region1 COmbining windows 2 and 3
+Chr11_map_win2 = map_maker(outlier_full_data$'2')
+Chr11_ped_win2 = ped_maker(outlier_full_data$'2')
+Chr11_map_win3 = map_maker(outlier_full_data$'3')
+Chr11_ped_win3 = ped_maker(outlier_full_data$'3')
+
+
+Chr11_data_win2 = Adegenet_PCA(outlier_ped = Chr11_ped_win2, 
+                               outlier_map = Chr11_map_win2, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr11_data_win3 = Adegenet_PCA(outlier_ped = Chr11_ped_win3, 
+                               outlier_map = Chr11_map_win3, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr11_data_win3 = Chr11_data_win3 %>% 
+  select(contains('AX-'))
+
+Chr11_win23 = bind_cols(Chr11_data_win2, 
+                        Chr11_data_win3)
+
+Pop_that_pca(Chr11_win23, 
+             pop_num = 39)
+
+write_tsv(Chr11_win23, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr11_REGION1_win23_14.05.2021.txt')
+
+## map file for continuous regions
+Chr11_region1 = bind_rows(Chr11_map_win2, 
+                          Chr11_map_win3)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_REGION1_14.05.2021.map')
+
+head(Chr11_region1)
+tail(Chr11_region1)
+
+## region size
+(4994889-2611798)/1000000
+## 2.38 Mb
+
+
+## CHR 11 REGION 2 window 5
+Chr11_map_win5 = map_maker(outlier_full_data$'5')
+Chr11_ped_win5 = ped_maker(outlier_full_data$'5')
+
+Chr11_data_win5 = Adegenet_PCA(outlier_ped = Chr11_ped_win5, 
+                               outlier_map = Chr11_map_win5, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Pop_that_pca(Chr11_data_win5, 
+             pop_num = 39)
+
+write_tsv(Chr11_data_win5, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr11_REGION2_win5_14.05.2021.txt')
+
+## map file for continuous regions
+Chr11_region2 = Chr11_map_win5 %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr11_REGION2_14.05.2021.map')
+
+head(Chr11_region2)
+tail(Chr11_region2)
+
+## region size
+(10393035-7226516)/1000000
+## 3.17Mb
+
+
+## combing all three regions. THey overlap based on the 
+## pcadmix results
+
+## old chr 11 code
 # Chr 11 ------------------------------------------------------------------
 
 lostruct_data = lostruct_run(data = tped, 
