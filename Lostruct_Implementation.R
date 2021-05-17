@@ -1423,5 +1423,194 @@ ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR13_REGION1_win
        units = 'cm')
 
 # Chr 14 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 14, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 14, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr14_map = map_maker(outlier_full_data$'11')
+Chr14_ped = ped_maker(outlier_full_data$'11')
 
 
+Chr14_data = Adegenet_PCA(outlier_ped = Chr14_ped, 
+                          outlier_map = Chr14_map, 
+                          OG_ped = OG_ped,
+                          env = env_data)
+
+Pop_that_pca(Chr14_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+# CHR 14 regions ----------------------------------------------------------
+
+Chr14_map_win7 = map_maker(outlier_full_data$'7')
+Chr14_ped_win7 = ped_maker(outlier_full_data$'7')
+Chr14_map_win8 = map_maker(outlier_full_data$'8')
+Chr14_ped_win8 = ped_maker(outlier_full_data$'8')
+
+
+Chr14_data_win7 = Adegenet_PCA(outlier_ped = Chr14_ped_win7, 
+                               outlier_map = Chr14_map_win7, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr14_data_win8 = Adegenet_PCA(outlier_ped = Chr14_ped_win8, 
+                               outlier_map = Chr14_map_win8, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr14_data_win8 = Chr14_data_win8 %>% 
+  select(contains('AX-'))
+
+Chr14_win78 = bind_cols(Chr14_data_win7, 
+                         Chr14_data_win8)
+
+Pop_that_pca(Chr14_win78, 
+             pop_num = 39)
+
+## Definitely not a structural variant
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR14_windows78_PCA.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm')
+
+## combining windows 10 and 11 to identify structural variants
+Chr14_map_win10 = map_maker(outlier_full_data$'10')
+Chr14_ped_win10 = ped_maker(outlier_full_data$'10')
+Chr14_map_win11 = map_maker(outlier_full_data$'11')
+Chr14_ped_win11 = ped_maker(outlier_full_data$'11')
+
+
+Chr14_data_win10 = Adegenet_PCA(outlier_ped = Chr14_ped_win10, 
+                               outlier_map = Chr14_map_win10, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr14_data_win11 = Adegenet_PCA(outlier_ped = Chr14_ped_win11, 
+                               outlier_map = Chr14_map_win11, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr14_data_win11 = Chr14_data_win11 %>% 
+  select(contains('AX-'))
+
+Chr14_win1011 = bind_cols(Chr14_data_win10, 
+                        Chr14_data_win11)
+
+Pop_that_pca(Chr14_win1011, 
+             pop_num = 39)
+## doesn't really look like a stuctural variant
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR14_windows1011_PCA.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm')
+
+# CHR 15 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 15, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 15, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+## No outliers
+
+# CHR16 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 16, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 16, 
+                                 window_size = 20, 
+                                 k_value = 2)
+Chr16_map = map_maker(outlier_full_data$'23')
+Chr16_ped = ped_maker(outlier_full_data$'23')
+
+
+Chr16_data = Adegenet_PCA(outlier_ped = Chr16_ped, 
+                          outlier_map = Chr16_map, 
+                          OG_ped = OG_ped,
+                          env = env_data)
+
+Pop_that_pca(Chr16_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+# CHR 16 regions------------------------------------------------------------------
+Chr16_map_win18 = map_maker(outlier_full_data$'18')
+Chr16_ped_win18 = ped_maker(outlier_full_data$'18')
+Chr16_map_win19 = map_maker(outlier_full_data$'19')
+Chr16_ped_win19 = ped_maker(outlier_full_data$'19')
+
+
+Chr16_data_win18 = Adegenet_PCA(outlier_ped = Chr16_ped_win18, 
+                               outlier_map = Chr16_map_win18, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr16_data_win19 = Adegenet_PCA(outlier_ped = Chr16_ped_win19, 
+                               outlier_map = Chr16_map_win19, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr16_data_win19 = Chr16_data_win19 %>% 
+  select(contains('AX-'))
+
+Chr16_win1819 = bind_cols(Chr16_data_win18, 
+                         Chr16_data_win19)
+
+Pop_that_pca(Chr16_win1819, 
+             pop_num = 39)
+
+## there's no structural variant here
+
+## combine regions 22 & 23
+Chr16_map_win22 = map_maker(outlier_full_data$'22')
+Chr16_ped_win22 = ped_maker(outlier_full_data$'22')
+Chr16_map_win23 = map_maker(outlier_full_data$'23')
+Chr16_ped_win23 = ped_maker(outlier_full_data$'23')
+
+
+Chr16_data_win22 = Adegenet_PCA(outlier_ped = Chr16_ped_win22, 
+                                outlier_map = Chr16_map_win22, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr16_data_win23 = Adegenet_PCA(outlier_ped = Chr16_ped_win23, 
+                                outlier_map = Chr16_map_win23, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr16_data_win23 = Chr16_data_win23 %>% 
+  select(contains('AX-'))
+
+Chr16_win2223 = bind_cols(Chr16_data_win22, 
+                          Chr16_data_win23)
+
+Pop_that_pca(Chr16_win2223, 
+             pop_num = 39)
+
+## Doesn't really look like a structural variant
