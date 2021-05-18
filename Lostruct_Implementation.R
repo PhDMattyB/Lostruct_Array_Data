@@ -1793,66 +1793,98 @@ Pop_that_pca(Chr18_data,
              win_num = 00)
 
 # CHR 18 REGIONS ----------------------------------------------------------
-Chr17_map_win2 = map_maker(outlier_full_data$'2')
-Chr17_ped_win2 = ped_maker(outlier_full_data$'2')
-Chr17_map_win3 = map_maker(outlier_full_data$'3')
-Chr17_ped_win3 = ped_maker(outlier_full_data$'3')
-Chr17_map_win4 = map_maker(outlier_full_data$'4')
-Chr17_ped_win4 = ped_maker(outlier_full_data$'4')
-Chr17_map_win5 = map_maker(outlier_full_data$'5')
-Chr17_ped_win5 = ped_maker(outlier_full_data$'5')
+Chr18_map_win6 = map_maker(outlier_full_data$'6')
+Chr18_ped_win6 = ped_maker(outlier_full_data$'6')
+Chr18_map_win7 = map_maker(outlier_full_data$'7')
+Chr18_ped_win7 = ped_maker(outlier_full_data$'7')
+Chr18_map_win8 = map_maker(outlier_full_data$'8')
+Chr18_ped_win8 = ped_maker(outlier_full_data$'8')
 
 
-Chr17_data_win2 = Adegenet_PCA(outlier_ped = Chr17_ped_win2, 
-                               outlier_map = Chr17_map_win2, 
+Chr18_data_win6 = Adegenet_PCA(outlier_ped = Chr18_ped_win6, 
+                               outlier_map = Chr18_map_win6, 
                                OG_ped = OG_ped,
                                env = env_data)
 
-Chr17_data_win3 = Adegenet_PCA(outlier_ped = Chr17_ped_win3, 
-                               outlier_map = Chr17_map_win3, 
+Chr18_data_win7 = Adegenet_PCA(outlier_ped = Chr18_ped_win7, 
+                               outlier_map = Chr18_map_win7, 
                                OG_ped = OG_ped,
                                env = env_data)
-Chr17_data_win4 = Adegenet_PCA(outlier_ped = Chr17_ped_win4, 
-                               outlier_map = Chr17_map_win4, 
-                               OG_ped = OG_ped,
-                               env = env_data)
-
-Chr17_data_win5 = Adegenet_PCA(outlier_ped = Chr17_ped_win5, 
-                               outlier_map = Chr17_map_win5, 
+Chr18_data_win8 = Adegenet_PCA(outlier_ped = Chr18_ped_win8, 
+                               outlier_map = Chr18_map_win8, 
                                OG_ped = OG_ped,
                                env = env_data)
 
-Chr17_data_win3 = Chr17_data_win3 %>% 
+
+Chr18_data_win7 = Chr18_data_win7 %>% 
   select(contains('AX-'))
-Chr17_data_win4 = Chr17_data_win4 %>% 
-  select(contains('AX-'))
-Chr17_data_win5 = Chr17_data_win5 %>% 
+Chr18_data_win8 = Chr18_data_win8 %>% 
   select(contains('AX-'))
 
-Chr17_win2345 = bind_cols(Chr17_data_win2, 
-                          Chr17_data_win3, 
-                          Chr17_data_win4, 
-                          Chr17_data_win5)
+Chr18_win678 = bind_cols(Chr18_data_win6,
+                         Chr18_data_win7, 
+                          Chr18_data_win8)
 
-Pop_that_pca(Chr17_win2345, 
+Pop_that_pca(Chr18_win678, 
              pop_num = 39)
 
-write_tsv(Chr17_win2345, 
-          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr17_REGION1_win2345_14.05.2021.txt')
+## yep that's fucked. Theres structure but it's weird
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR18_win678_PCA.tiff', 
+       plot = last_plot(), 
+       dpi = 'retina', 
+       units = 'cm')
+
+
+## Need to combine 16, 17, 18
+Chr18_map_win16 = map_maker(outlier_full_data$'16')
+Chr18_ped_win16 = ped_maker(outlier_full_data$'16')
+Chr18_map_win17 = map_maker(outlier_full_data$'17')
+Chr18_ped_win17 = ped_maker(outlier_full_data$'17')
+Chr18_map_win18 = map_maker(outlier_full_data$'18')
+Chr18_ped_win18 = ped_maker(outlier_full_data$'18')
+
+
+Chr18_data_win16 = Adegenet_PCA(outlier_ped = Chr18_ped_win16, 
+                               outlier_map = Chr18_map_win16, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr18_data_win17 = Adegenet_PCA(outlier_ped = Chr18_ped_win17, 
+                               outlier_map = Chr18_map_win17, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+Chr18_data_win18 = Adegenet_PCA(outlier_ped = Chr18_ped_win18, 
+                               outlier_map = Chr18_map_win18, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+
+Chr18_data_win17 = Chr18_data_win17 %>% 
+  select(contains('AX-'))
+Chr18_data_win18 = Chr18_data_win18 %>% 
+  select(contains('AX-'))
+
+Chr18_win161718 = bind_cols(Chr18_data_win16,
+                         Chr18_data_win17, 
+                         Chr18_data_win18)
+
+Pop_that_pca(Chr18_win161718, 
+             pop_num = 39)
+
+write_tsv(Chr18_win161718, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr18_REGION2_win161718_14.05.2021.txt')
 
 ## map file for continuous regions
-Chr17_region3 = bind_rows(Chr17_map_win2, 
-                          Chr17_map_win3,
-                          Chr17_map_win4,
-                          Chr17_map_win5)%>% 
+Chr18_region2 = bind_rows(Chr18_map_win16, 
+                          Chr18_map_win17,
+                          Chr18_map_win18)%>% 
   select(1:4) %>% 
   rename(`#Chromosome` = Chromosome) %>% 
-  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr17_REGION1_14.05.2021.map')
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr18_REGION2_14.05.2021.map')
 
-head(Chr17_region3)
-tail(Chr17_region3)
+head(Chr18_region2)
+tail(Chr18_region2)
 
 ## region size
-(5836567-1864217)/1000000
-## 3.97 Mb
-
+(33322062-27640399)/1000000
+## 5.68 Mb
