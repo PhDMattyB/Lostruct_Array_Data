@@ -1888,3 +1888,804 @@ tail(Chr18_region2)
 ## region size
 (33322062-27640399)/1000000
 ## 5.68 Mb
+
+
+# CHR19 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 19, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 19, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr19_map = map_maker(outlier_full_data$'11')
+Chr19_ped = ped_maker(outlier_full_data$'11')
+
+
+Chr19_data = Adegenet_PCA(outlier_ped = Chr19_ped, 
+                          outlier_map = Chr19_map, 
+                          OG_ped = OG_ped,
+                          env = env_data)
+
+Pop_that_pca(Chr19_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+
+# CHR 19 region -----------------------------------------------------------
+
+Chr19_map_win10 = map_maker(outlier_full_data$'10')
+Chr19_ped_win10 = ped_maker(outlier_full_data$'10')
+Chr19_map_win11 = map_maker(outlier_full_data$'11')
+Chr19_ped_win11 = ped_maker(outlier_full_data$'11')
+
+
+Chr19_data_win10 = Adegenet_PCA(outlier_ped = Chr19_ped_win10, 
+                                outlier_map = Chr19_map_win10, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr19_data_win11 = Adegenet_PCA(outlier_ped = Chr19_ped_win11, 
+                                outlier_map = Chr19_map_win11, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr19_data_win11 = Chr19_data_win11 %>% 
+  select(contains('AX-'))
+
+Chr19_win1011 = bind_cols(Chr19_data_win10,
+                            Chr19_data_win11)
+
+Pop_that_pca(Chr19_win1011, 
+             pop_num = 39)
+
+write_tsv(Chr19_win1011, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr19_REGION1_win1011_14.05.2021.txt')
+
+## map file for continuous regions
+Chr19_region1 = bind_rows(Chr19_map_win10, 
+                          Chr19_map_win11)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr19_REGION1_14.05.2021.map')
+
+head(Chr19_region1)
+tail(Chr19_region1)
+
+## region size
+(20969278-17697514)/1000000
+
+
+# CHR20 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 20, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 20, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr20_map = map_maker(outlier_full_data$'13')
+Chr20_ped = ped_maker(outlier_full_data$'13')
+
+
+Chr20_data = Adegenet_PCA(outlier_ped = Chr20_ped, 
+                          outlier_map = Chr20_map, 
+                          OG_ped = OG_ped,
+                          env = env_data)
+
+Pop_that_pca(Chr20_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+
+# CHR20 REGIONS -----------------------------------------------------------
+
+Chr20_map_win10 = map_maker(outlier_full_data$'10')
+Chr20_ped_win10 = ped_maker(outlier_full_data$'10')
+Chr20_map_win11 = map_maker(outlier_full_data$'11')
+Chr20_ped_win11 = ped_maker(outlier_full_data$'11')
+Chr20_map_win12 = map_maker(outlier_full_data$'12')
+Chr20_ped_win12 = ped_maker(outlier_full_data$'12')
+Chr20_map_win13 = map_maker(outlier_full_data$'13')
+Chr20_ped_win13 = ped_maker(outlier_full_data$'13')
+
+
+Chr20_data_win10 = Adegenet_PCA(outlier_ped = Chr20_ped_win10, 
+                                outlier_map = Chr20_map_win10, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr20_data_win11 = Adegenet_PCA(outlier_ped = Chr20_ped_win11, 
+                                outlier_map = Chr20_map_win11, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+Chr20_data_win12 = Adegenet_PCA(outlier_ped = Chr20_ped_win12, 
+                                outlier_map = Chr20_map_win12, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+Chr20_data_win13 = Adegenet_PCA(outlier_ped = Chr20_ped_win13, 
+                                outlier_map = Chr20_map_win13, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr20_data_win11 = Chr20_data_win11 %>% 
+  select(contains('AX-'))
+Chr20_data_win12 = Chr20_data_win12 %>% 
+  select(contains('AX-'))
+Chr20_data_win13 = Chr20_data_win13 %>% 
+  select(contains('AX-'))
+
+
+Chr20_win10111213 = bind_cols(Chr20_data_win10,
+                          Chr20_data_win11, 
+                          Chr20_data_win12, 
+                          Chr20_data_win13)
+
+Pop_that_pca(Chr20_win10111213, 
+             pop_num = 39)
+
+write_tsv(Chr20_win10111213, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr20_REGION1_win10111213_14.05.2021.txt')
+
+## map file for continuous regions
+Chr20_region1 = bind_rows(Chr20_map_win10, 
+                          Chr20_map_win11, 
+                          Chr20_map_win12, 
+                          Chr20_map_win13)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR20_REGION1_14.05.2021.map')
+
+head(Chr20_region1)
+tail(Chr20_region1)
+
+## region size
+(27645135-22501825)/1000000
+
+
+# CHR21 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 21, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 21, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr21_map_win23 = map_maker(outlier_full_data$'23')
+Chr21_ped_win23 = ped_maker(outlier_full_data$'23')
+Chr21_map_win24 = map_maker(outlier_full_data$'24')
+Chr21_ped_win24 = ped_maker(outlier_full_data$'24')
+Chr21_map_win25 = map_maker(outlier_full_data$'25')
+Chr21_ped_win25 = ped_maker(outlier_full_data$'25')
+
+Chr21_data_win23 = Adegenet_PCA(outlier_ped = Chr21_ped_win23, 
+                                outlier_map = Chr21_map_win23, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr21_data_win24 = Adegenet_PCA(outlier_ped = Chr21_ped_win24, 
+                                outlier_map = Chr21_map_win24, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+Chr21_data_win25 = Adegenet_PCA(outlier_ped = Chr21_ped_win25, 
+                                outlier_map = Chr21_map_win25, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr21_data_win24 = Chr21_data_win24 %>% 
+  select(contains('AX-'))
+Chr21_data_win25 = Chr21_data_win25 %>% 
+  select(contains('AX-'))
+
+
+Chr21_win232425 = bind_cols(Chr21_data_win23,
+                              Chr21_data_win24, 
+                              Chr21_data_win25)
+
+Pop_that_pca(Chr21_win232425, 
+             pop_num = 39)
+## Definitely not an SV
+
+# CHR22 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 22, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 22, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr22_map_win10 = map_maker(outlier_full_data$'10')
+Chr22_ped_win10 = ped_maker(outlier_full_data$'10')
+Chr22_map_win11 = map_maker(outlier_full_data$'11')
+Chr22_ped_win11 = ped_maker(outlier_full_data$'11')
+
+Chr22_data_win10 = Adegenet_PCA(outlier_ped = Chr22_ped_win10, 
+                                outlier_map = Chr22_map_win10, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr22_data_win11 = Adegenet_PCA(outlier_ped = Chr22_ped_win11, 
+                                outlier_map = Chr22_map_win11, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr22_data_win11 = Chr22_data_win11 %>% 
+  select(contains('AX-'))
+
+Chr22_win1011 = bind_cols(Chr22_data_win10,
+                            Chr22_data_win11)
+
+Pop_that_pca(Chr22_win1011, 
+             pop_num = 39)
+
+write_tsv(Chr22_win1011, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr22_REGION1_win1011_14.05.2021.txt')
+
+## map file for continuous regions
+Chr22_region1 = bind_rows(Chr22_map_win10, 
+                          Chr22_map_win11)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR22_REGION1_14.05.2021.map')
+
+head(Chr22_region1)
+tail(Chr22_region1)
+
+## region size
+(20025543-17288288)/1000000
+
+# CHR23 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 23, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 23, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+# CHR23 REGIONS -----------------------------------------------------------
+## combining windows 9, 10, 11
+Chr23_map_win9 = map_maker(outlier_full_data$'9')
+Chr23_ped_win9 = ped_maker(outlier_full_data$'9')
+Chr23_map_win10 = map_maker(outlier_full_data$'10')
+Chr23_ped_win10 = ped_maker(outlier_full_data$'10')
+Chr23_map_win11 = map_maker(outlier_full_data$'11')
+Chr23_ped_win11 = ped_maker(outlier_full_data$'11')
+
+Chr23_data_win9 = Adegenet_PCA(outlier_ped = Chr23_ped_win9, 
+                                outlier_map = Chr23_map_win9, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr23_data_win10 = Adegenet_PCA(outlier_ped = Chr23_ped_win10, 
+                                outlier_map = Chr23_map_win10, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr23_data_win11 = Adegenet_PCA(outlier_ped = Chr23_ped_win11, 
+                                outlier_map = Chr23_map_win11, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr23_data_win10 = Chr23_data_win10 %>% 
+  select(contains('AX-'))
+
+Chr23_data_win11 = Chr23_data_win11 %>% 
+  select(contains('AX-'))
+
+Chr23_win91011 = bind_cols(Chr23_data_win9, 
+                          Chr23_data_win10,
+                          Chr23_data_win11)
+
+Pop_that_pca(Chr23_win91011, 
+             pop_num = 39)
+
+write_tsv(Chr23_win91011, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_CHR23_REGION1_win91011_14.05.2021.txt')
+
+## map file for continuous regions
+Chr23_region1 = bind_rows(Chr23_map_win9, 
+                          Chr23_map_win10, 
+                          Chr23_map_win11)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR23_REGION1_14.05.2021.map')
+
+head(Chr23_region1)
+tail(Chr23_region1)
+
+## region size
+(24975155-17149434)/1000000
+
+
+## combine windows 29 and 30
+Chr23_map_win29 = map_maker(outlier_full_data$'29')
+Chr23_ped_win29 = ped_maker(outlier_full_data$'29')
+Chr23_map_win30 = map_maker(outlier_full_data$'30')
+Chr23_ped_win30 = ped_maker(outlier_full_data$'30')
+
+Chr23_data_win29 = Adegenet_PCA(outlier_ped = Chr23_ped_win29, 
+                               outlier_map = Chr23_map_win29, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr23_data_win30 = Adegenet_PCA(outlier_ped = Chr23_ped_win30, 
+                                outlier_map = Chr23_map_win30, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr23_data_win30 = Chr23_data_win30 %>% 
+  select(contains('AX-'))
+
+Chr23_win2930 = bind_cols(Chr23_data_win29, 
+                           Chr23_data_win30)
+
+Pop_that_pca(Chr23_win2930, 
+             pop_num = 39)
+
+write_tsv(Chr23_win2930, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_CHR23_REGION2_win2930_14.05.2021.txt')
+
+## map file for continuous regions
+Chr23_region2 = bind_rows(Chr23_map_win29, 
+                          Chr23_map_win30)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR23_REGION2_14.05.2021.map')
+
+head(Chr23_region2)
+tail(Chr23_region2)
+
+## region size
+(67132585-63255761)/1000000
+
+
+# CHR 24 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 24, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 24, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+# CHR25 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 25, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 25, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr25_map_win13 = map_maker(outlier_full_data$'13')
+Chr25_ped_win13 = ped_maker(outlier_full_data$'13')
+Chr25_map_win14 = map_maker(outlier_full_data$'14')
+Chr25_ped_win14 = ped_maker(outlier_full_data$'14')
+
+Chr25_data_win13 = Adegenet_PCA(outlier_ped = Chr25_ped_win13, 
+                                outlier_map = Chr25_map_win13, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr25_data_win14 = Adegenet_PCA(outlier_ped = Chr25_ped_win14, 
+                                outlier_map = Chr25_map_win14, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr25_data_win14 = Chr25_data_win14 %>% 
+  select(contains('AX-'))
+
+Chr25_win1314 = bind_cols(Chr25_data_win13,
+                          Chr25_data_win14)
+
+Pop_that_pca(Chr25_win1314, 
+             pop_num = 39)
+
+## No dice Jim Rice
+
+# CHR26 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 26, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 26, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+# CHR26 REGIONS -----------------------------------------------------------
+
+Chr26_map_win1 = map_maker(outlier_full_data$'1')
+Chr26_ped_win1 = ped_maker(outlier_full_data$'1')
+Chr26_map_win2 = map_maker(outlier_full_data$'2')
+Chr26_ped_win2 = ped_maker(outlier_full_data$'2')
+
+Chr26_data_win1 = Adegenet_PCA(outlier_ped = Chr26_ped_win1, 
+                                outlier_map = Chr26_map_win1, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr26_data_win2 = Adegenet_PCA(outlier_ped = Chr26_ped_win2, 
+                                outlier_map = Chr26_map_win2, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr26_data_win2 = Chr26_data_win2 %>% 
+  select(contains('AX-'))
+
+Chr26_win12 = bind_cols(Chr26_data_win1,
+                          Chr26_data_win2)
+
+Pop_that_pca(Chr26_win12, 
+             pop_num = 39)
+
+## No dice Jim Rice
+
+
+## combining windows 11 and 12
+Chr26_map_win11 = map_maker(outlier_full_data$'11')
+Chr26_ped_win11 = ped_maker(outlier_full_data$'11')
+Chr26_map_win12 = map_maker(outlier_full_data$'12')
+Chr26_ped_win12 = ped_maker(outlier_full_data$'12')
+
+Chr26_data_win11 = Adegenet_PCA(outlier_ped = Chr26_ped_win11, 
+                               outlier_map = Chr26_map_win11, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr26_data_win12 = Adegenet_PCA(outlier_ped = Chr26_ped_win12, 
+                               outlier_map = Chr26_map_win12, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+
+Chr26_data_win12 = Chr26_data_win12 %>% 
+  select(contains('AX-'))
+
+Chr26_win1112 = bind_cols(Chr26_data_win11,
+                        Chr26_data_win12)
+
+Pop_that_pca(Chr26_win1112, 
+             pop_num = 39)
+## Nah Bruh
+# CHR27 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 27, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 27, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+# CHR28 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 28, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 28, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+# CHR 29 ------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 29, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 29, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr29_map = map_maker(outlier_full_data$'16')
+Chr29_ped = ped_maker(outlier_full_data$'16')
+
+
+Chr29_data = Adegenet_PCA(outlier_ped = Chr29_ped, 
+                         outlier_map = Chr29_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr29_data, 
+             pop_num = 39,
+             chr_num = 7, 
+             win_num = 00)
+## NAH
+
+# CHR30 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 30, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 30, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+Chr30_map_win17 = map_maker(outlier_full_data$'17')
+Chr30_ped_win17 = ped_maker(outlier_full_data$'17')
+Chr30_map_win18 = map_maker(outlier_full_data$'18')
+Chr30_ped_win18 = ped_maker(outlier_full_data$'18')
+
+Chr30_data_win17 = Adegenet_PCA(outlier_ped = Chr30_ped_win17, 
+                               outlier_map = Chr30_map_win17, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr30_data_win18 = Adegenet_PCA(outlier_ped = Chr30_ped_win18, 
+                               outlier_map = Chr30_map_win18, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+
+Chr30_data_win18 = Chr30_data_win18 %>% 
+  select(contains('AX-'))
+
+Chr30_win1718 = bind_cols(Chr30_data_win17,
+                        Chr30_data_win18)
+
+Pop_that_pca(Chr30_win1718, 
+             pop_num = 39)
+## NAH
+
+# CHR 31 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 31, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 31, 
+                                 window_size = 20, 
+                                 k_value = 2)
+Chr31_map_win19 = map_maker(outlier_full_data$'19')
+Chr31_ped_win19 = ped_maker(outlier_full_data$'19')
+Chr31_map_win18 = map_maker(outlier_full_data$'18')
+Chr31_ped_win18 = ped_maker(outlier_full_data$'18')
+Chr31_map_win20 = map_maker(outlier_full_data$'20')
+Chr31_ped_win20 = ped_maker(outlier_full_data$'20')
+
+
+Chr31_data_win19 = Adegenet_PCA(outlier_ped = Chr31_ped_win19, 
+                                outlier_map = Chr31_map_win19, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr31_data_win18 = Adegenet_PCA(outlier_ped = Chr31_ped_win18, 
+                                outlier_map = Chr31_map_win18, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr31_data_win20 = Adegenet_PCA(outlier_ped = Chr31_ped_win20, 
+                                outlier_map = Chr31_map_win20, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr31_data_win19 = Chr31_data_win19 %>% 
+  select(contains('AX-'))
+Chr31_data_win20 = Chr31_data_win20 %>% 
+  select(contains('AX-'))
+
+
+Chr31_win181920 = bind_cols(Chr31_data_win18, 
+                          Chr31_data_win19, 
+                          Chr31_data_win20)
+
+Pop_that_pca(Chr31_win181920, 
+             pop_num = 39)
+## NAH
+
+
+# CHR 32 ------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 32, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 32, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+Chr32_map_win2 = map_maker(outlier_full_data$'2')
+Chr32_ped_win2 = ped_maker(outlier_full_data$'2')
+Chr32_data_win2 = Adegenet_PCA(outlier_ped = Chr32_ped_win2, 
+                               outlier_map = Chr32_map_win2, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Pop_that_pca(Chr32_data_win2,
+             pop_num = 39)
+
+write_tsv(Chr32_data_win2, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr32_REGION1_win2_14.05.2021.txt')
+
+## map file for continuous regions
+Chr32_region1 = Chr32_map_win2 %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr32_REGION1_14.05.2021.map')
+
+head(Chr32_region1)
+tail(Chr32_region1)
+
+## region size
+(4504500-2008042)/1000000
+
+
+# CHR33 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 33, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 33, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+
+# CHR34 -------------------------------------------------------------------
+
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 34, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 34, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+## COmbine windows 5 & 6
+Chr34_map_win22 = map_maker(outlier_full_data$'22')
+Chr34_ped_win22 = ped_maker(outlier_full_data$'22')
+Chr34_map_win23 = map_maker(outlier_full_data$'23')
+Chr34_ped_win23 = ped_maker(outlier_full_data$'23')
+Chr34_map_win24 = map_maker(outlier_full_data$'24')
+Chr34_ped_win24 = ped_maker(outlier_full_data$'24')
+
+Chr34_data_win22 = Adegenet_PCA(outlier_ped = Chr34_ped_win22, 
+                               outlier_map = Chr34_map_win22, 
+                               OG_ped = OG_ped,
+                               env = env_data)
+
+Chr34_data_win23 = Adegenet_PCA(outlier_ped = Chr34_ped_win23, 
+                                outlier_map = Chr34_map_win23, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+Chr34_data_win24 = Adegenet_PCA(outlier_ped = Chr34_ped_win24, 
+                                outlier_map = Chr34_map_win24, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+
+Chr34_data_win23 = Chr34_data_win23 %>% 
+  select(contains('AX-'))
+Chr34_data_win24 = Chr34_data_win24 %>% 
+  select(contains('AX-'))
+
+
+Chr34_win222324 = bind_cols(Chr34_data_win22, 
+                           Chr34_data_win23, 
+                         Chr34_data_win24)
+
+Pop_that_pca(Chr34_win222324, 
+             pop_num = 39)
+
+## not super clear
+
+
+# CHR35 -------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 35, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 35, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+## potential SV on window 2
+
+## combine data on windows 5 and 6
