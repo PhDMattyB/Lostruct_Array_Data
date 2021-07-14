@@ -173,7 +173,7 @@ chr1_combo_win1011 = bind_cols(chr_data_win10,
 PCA_outlier_wins1011 = Pop_that_pca(chr1_combo_win1011, 
                                     pop_num = 39,
                                     chr_num = 1, 
-                                    win_num = 1617)
+                                    win_num = 1011)
 
 write_tsv(chr1_combo_win1011, 
           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_chr1_region1.txt')
@@ -277,7 +277,7 @@ chr1_combo_win2223 = bind_cols(chr_data_win22,
 Pop_that_pca(chr1_combo_win2223, 
              pop_num = 39,
              chr_num = 1, 
-             win_num = 1617)
+             win_num = 2223)
 
 write_tsv(chr1_combo_win2223, 
           '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_chr1_region3.txt')
@@ -593,6 +593,37 @@ tail(Chr3_region2)
 ## Need to use the data object in the Data_explore script
 ## The data needed for adegenet is recoded as 12 format
 ## needs to be in AA CC GG TT format
+
+
+
+# CHR4 --------------------------------------------------------------------
+lostruct_data = lostruct_run(data = tped, 
+                             chr = 4, 
+                             window_size = 20, 
+                             k_value = 2)
+outliers = Outlier_hunter(data = lostruct_data,
+                          sd_percentile = 2)
+
+outlier_full_data = Outlier_data(data = tped, 
+                                 outlier_data = outliers, 
+                                 chr = 4, 
+                                 window_size = 20, 
+                                 k_value = 2)
+
+
+Chr3_map = map_maker(outlier_full_data$'17')
+Chr3_ped = ped_maker(outlier_full_data$'17')
+
+
+Chr3_data = Adegenet_PCA(outlier_ped = Chr3_ped, 
+                         outlier_map = Chr3_map, 
+                         OG_ped = OG_ped,
+                         env = env_data)
+
+Pop_that_pca(Chr3_data, 
+             pop_num = 39,
+             chr_num = 3, 
+             win_num = 00)
 
 
 # CHR 5 -------------------------------------------------------------------
@@ -1036,7 +1067,32 @@ tail(Chr9_region1)
 ## region size
 (3499661-2633420)/1000000
 
+Chr9_map_win12 = map_maker(outlier_full_data$'12')
+Chr9_ped_win12 = ped_maker(outlier_full_data$'12')
 
+
+Chr9_data_win12 = Adegenet_PCA(outlier_ped = Chr9_ped_win12, 
+                              outlier_map = Chr9_map_win12, 
+                              OG_ped = OG_ped,
+                              env = env_data)
+
+Pop_that_pca(Chr9_data_win12, 
+             pop_num = 39)
+
+write_tsv(Chr9_data_win12, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr9_REGION2_win12_14.07.2021.txt')
+
+## map file for continuous regions
+Chr9_region2 = Chr9_map_win12%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr9_REGION2_14.07.2021.map')
+
+head(Chr9_region2)
+tail(Chr9_region2)
+
+## region size
+(16851673-14890186)/1000000
 # Chr 10 ------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
                              chr = 10, 
@@ -1400,8 +1456,8 @@ outlier_full_data = Outlier_data(data = tped,
                                  window_size = 20, 
                                  k_value = 2)
 
-Chr13_map = map_maker(outlier_full_data$'1')
-Chr13_ped = ped_maker(outlier_full_data$'1')
+Chr13_map = map_maker(outlier_full_data$'6')
+Chr13_ped = ped_maker(outlier_full_data$'6')
 
 
 Chr13_data = Adegenet_PCA(outlier_ped = Chr13_ped, 
@@ -1514,6 +1570,23 @@ ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/CHR14_windows1011
        plot = last_plot(), 
        dpi = 'retina', 
        units = 'cm')
+
+write_tsv(Chr14_win1011, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr14_REGION2_win23_14.07.2021.txt')
+
+## map file for continuous regions
+Chr14_region2 = bind_rows(Chr14_map_win10, 
+                          Chr14_map_win11)%>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr14_REGION2_14.07.2021.map')
+
+head(Chr14_region2)
+tail(Chr14_region2)
+
+## region size
+(26022048-19560387)/1000000
+## 6.46 Mb
 
 # CHR 15 ------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
@@ -2278,6 +2351,8 @@ tail(Chr23_region2)
 
 
 # CHR 24 ------------------------------------------------------------------
+
+
 lostruct_data = lostruct_run(data = tped, 
                              chr = 24, 
                              window_size = 20, 
@@ -2482,6 +2557,20 @@ outlier_full_data = Outlier_data(data = tped,
                                  window_size = 20, 
                                  k_value = 2)
 
+Chr30_map_win3 = map_maker(outlier_full_data$'3')
+Chr30_ped_win3 = ped_maker(outlier_full_data$'3')
+Chr30_data_win3 = Adegenet_PCA(outlier_ped = Chr30_ped_win3, 
+                                outlier_map = Chr30_map_win3, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
+Chr30_map_win8 = map_maker(outlier_full_data$'8')
+Chr30_ped_win8 = ped_maker(outlier_full_data$'8')
+Chr30_data_win8 = Adegenet_PCA(outlier_ped = Chr30_ped_win8, 
+                                outlier_map = Chr30_map_win8, 
+                                OG_ped = OG_ped,
+                                env = env_data)
+
 Chr30_map_win17 = map_maker(outlier_full_data$'17')
 Chr30_ped_win17 = ped_maker(outlier_full_data$'17')
 Chr30_map_win18 = map_maker(outlier_full_data$'18')
@@ -2504,9 +2593,27 @@ Chr30_data_win18 = Chr30_data_win18 %>%
 Chr30_win1718 = bind_cols(Chr30_data_win17,
                         Chr30_data_win18)
 
-Pop_that_pca(Chr30_win1718, 
+Pop_that_pca(Chr30_data_win3, 
              pop_num = 39)
 ## NAH
+
+
+write_tsv(Chr30_data_win3, 
+          '~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Lostruct_Chr30_REGION1_win3_14.07.2021.txt')
+
+## map file for continuous regions
+Chr30_region1 = Chr30_map_win3 %>% 
+  select(1:4) %>% 
+  rename(`#Chromosome` = Chromosome) %>% 
+  write_tsv('~/Charr_Adaptive_Introgression/Charr_Project_1/Lostruc/Chr30_REGION1_14.07.2021.map')
+
+head(Chr30_region1)
+tail(Chr30_region1)
+
+## region size
+(4445883-3148384)/1000000
+## 1.30Mb
+
 
 # CHR 31 ------------------------------------------------------------------
 lostruct_data = lostruct_run(data = tped, 
